@@ -31,11 +31,11 @@ namespace N_Puzzle
             elements[0] = elements[size];
             elements.RemoveAt(size);
             size--;
-            heapifyDown(0);
+            heapifyMin(0);
             return value;
         }
 
-        private void heapifyDown(int index)
+        private void heapifyMin(int index)
         {
             int left = index * 2 + 1;
             int right = index * 2 + 2;
@@ -50,7 +50,7 @@ namespace N_Puzzle
             if (highest != index)
             {
                 Swap(highest, index);
-                heapifyDown(highest);
+                heapifyMin(highest);
             }
         }
 
