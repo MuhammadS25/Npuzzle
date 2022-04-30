@@ -19,7 +19,7 @@ namespace N_Puzzle
                 Console.WriteLine("Sample : ");
                 foreach (string name in samplefilenames)
                 {
-                    string solvedSample = @"D:\college\Algo\[3] N Puzzle\Testcases\Sample\Sample Test\Solvable Puzzles\" + name + @".txt";
+                    string solvedSample = @"Sample Test/Solvable Puzzles/" + name + @".txt";
                     
                     List<int> lis = new List<int>();
                     string[] s = File.ReadAllLines(solvedSample);
@@ -59,7 +59,7 @@ namespace N_Puzzle
 
                 //foreach (string name in completefilenames)
                 //{
-                //    string solvedComplete = @"D:\college\Algo\[3] N Puzzle\Testcases\Complete\Complete Test\Complete Test\Solvable puzzles\Manhattan Only\" + name + @".txt";
+                //    string solvedComplete = @"/Complete Test/Complete Test/Solvable puzzles/Manhattan Only/" + name + @".txt";
                     
                 //    List<int> lis = new List<int>();
                 //    string[] s = File.ReadAllLines(solvedComplete);
@@ -88,7 +88,7 @@ namespace N_Puzzle
 
                 //foreach (string name in completefilenames2)
                 //{
-                //    string solvedComplete = @"D:\college\Algo\[3] N Puzzle\Testcases\Complete\Complete Test\Complete Test\Solvable puzzles\Manhattan & Hamming\" + name + @".txt";
+                //    string solvedComplete = @"/Complete/Complete Test/Complete Test/Solvable puzzles/Manhattan & Hamming/" + name + @".txt";
                     
                 //    List<int> lis = new List<int>();
                 //    string[] s = File.ReadAllLines(solvedComplete);
@@ -122,7 +122,7 @@ namespace N_Puzzle
                 Console.WriteLine("Sample : ");
                 foreach (string name in samplefilenames)
                 {
-                    string unsolvedSample = @"D:\college\Algo\[3] N Puzzle\Testcases\Sample\Sample Test\Unsolvable Puzzles\" + name + @".txt";
+                    string unsolvedSample = @"Sample Test/Unsolvable Puzzles/" + name + @".txt";
                    
                     List<int> lis = new List<int>();
                     string[] s = File.ReadAllLines(unsolvedSample);
@@ -154,7 +154,7 @@ namespace N_Puzzle
 
                 foreach (string name in completefilenames)
                 {
-                    string unsolvedComplete = @"D:\college\Algo\[3] N Puzzle\Testcases\Complete\Complete Test\Complete Test\Unsolvable puzzles\" + name + @".txt";
+                    string unsolvedComplete = @"Complete Test/Complete Test/Unsolvable puzzles/" + name + @".txt";
                     List<int> lis = new List<int>();
                     string[] s = File.ReadAllLines(unsolvedComplete);
                     int n = int.Parse(s[0]);
