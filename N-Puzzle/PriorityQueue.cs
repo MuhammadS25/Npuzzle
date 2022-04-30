@@ -5,29 +5,29 @@ using System.Text;
 namespace N_Puzzle
 {
     class PriorityQueue { 
-        List<int> elements = new List<int>();
-        int size = -1;
         
+        int size = -1;
+        List<Node> elements = new List<Node>();
         public PriorityQueue()
         {
-            elements = new List<int>();
+            elements = new List<Node>();
         }
 
-        public void push(int value)
+        public void push(Node value)
         {
             elements.Add(value);
             size++;
             int index = size;
-            while (index >= 0 && elements[(index - 1) / 2] > elements[index])
+            while (index >= 0 && elements[(index - 1) / 2].hValue > elements[index].hValue)
             {
                 Swap(index, (index - 1) / 2);
                 index = (index - 1) / 2;
             }
         }
 
-        public int pop()
+        public Node pop()
         {
-            int value = elements[0];
+            Node value = elements[0];
             elements[0] = elements[size];
             elements.RemoveAt(size);
             size--;
@@ -42,9 +42,9 @@ namespace N_Puzzle
 
             int highest = index;
 
-            if (left <= size && elements[highest] > elements[left])
+            if (left <= size && elements[highest].hValue > elements[left].hValue)
                 highest = left;
-            if (right <= size && elements[highest] > elements[right])
+            if (right <= size && elements[highest].hValue > elements[right].hValue)
                 highest = right;
 
             if (highest != index)
@@ -56,7 +56,7 @@ namespace N_Puzzle
 
         void Swap(int first , int second)
         {
-            int temp = elements[first];
+            Node temp = elements[first];
             elements[first] = elements[second];
             elements[second] = temp;
         }
