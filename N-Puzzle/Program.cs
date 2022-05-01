@@ -19,7 +19,7 @@ namespace N_Puzzle
                 Console.WriteLine("Sample : ");
                 foreach (string name in samplefilenames)
                 {
-                    string solvedSample = @"Sample Test/Solvable Puzzles/"+name+@".txt";
+                    string solvedSample = @"Sample Test/Solvable Puzzles/" + name + @".txt";
 
                     List<int> lis = new List<int>();
                     string[] s = File.ReadAllLines(solvedSample);

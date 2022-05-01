@@ -100,17 +100,18 @@ namespace N_Puzzle
             Node parent = new Node(matrix, 0, null);
             parent.setState();
             findZero(parent);
-            parent.hValue = hamming(parent.mat);
+            parent.hValue = manhattan(parent.mat) ;
             set.Add(parent.state);
             priorityQueue.push(parent);
+
+
             while (priorityQueue.getSize() != 0)
             {
                 parent = priorityQueue.pop();
-
                 int[] aroundZeroX = new int[4] { parent.x0 - 1, parent.x0 + 1, parent.x0, parent.x0 };
-                int[] aroundZeroY = new int[4] { parent.y0, parent.y0, parent.y0 - 1, parent.y0 + 1 };
+                int[] aroundZeroY = new int[4] { parent.y0, parent.y0, parent.y0 + 1, parent.y0 - 1 };
 
-                if (parent.hValue == 0)
+                if (isGoal(parent))
                 {
                     if (n == 3)
                     {
@@ -129,12 +130,10 @@ namespace N_Puzzle
                     {
                         Node newNode = Swap(parent.x0, parent.y0, aroundZeroX[i], aroundZeroY[i], parent);
                         newNode.setState();
-                        newNode.parent = parent;
                         if (!set.Contains(newNode.state))
                         {
                             set.Add(newNode.state);
-                            newNode.depth = parent.depth + 1;
-                            newNode.hValue = manhattan(newNode.mat);
+                            newNode.hValue = manhattan(newNode.mat) + newNode.depth ;
                             priorityQueue.push(newNode);
                         }
 
@@ -144,7 +143,6 @@ namespace N_Puzzle
                         continue;
                     }
                 }
-                
             }
         }
 
