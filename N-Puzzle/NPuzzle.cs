@@ -162,14 +162,13 @@ namespace N_Puzzle
 
         public int hamming(int[,] mat)
         {
-            int misPlaced = 0, temp = 1;
+            int misPlaced = 0;
             for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j < n; j++)
                 {
-                    if (mat[i, j] != temp)
+                    if (mat[i,j] != 0 && mat[i, j] != goal[i,j])
                         misPlaced++;
-                    temp++;
                 }
             }
 
