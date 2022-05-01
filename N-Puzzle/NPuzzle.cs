@@ -9,6 +9,8 @@ namespace N_Puzzle
         public int[,] matrix;
         public int[,] goal;
         int n;
+        public int x0, y0;
+
 
         public NPuzzle(int n)
         {
@@ -99,8 +101,9 @@ namespace N_Puzzle
             HashSet<string> set = new HashSet<string>();
             Node parent = new Node(matrix, 0, null);
             parent.setState();
-            findZero(parent);
-            parent.hValue = manhattan(parent.mat) ;
+            parent.x0 = x0;
+            parent.y0 = y0;
+            parent.hValue = hamming(parent.mat) ;
             set.Add(parent.state);
             priorityQueue.push(parent);
 
@@ -110,17 +113,12 @@ namespace N_Puzzle
                 parent = priorityQueue.pop();
                 int[] aroundZeroX = new int[4] { parent.x0 - 1, parent.x0 + 1, parent.x0, parent.x0 };
                 int[] aroundZeroY = new int[4] { parent.y0, parent.y0, parent.y0 + 1, parent.y0 - 1 };
-
-                if (parent.hValue == parent.depth)
+                //Print(parent.mat);
+                if (isGoal(parent))
                 {
-                    if (n == 3)
-                    {
+                    if( n == 3)
                         printroot(parent);
-                    }
-                    else
-                    {
-                        Console.WriteLine(parent.depth);
-                    }
+                    Console.WriteLine("steps :" + parent.depth);
                     break;
                 }
 
@@ -148,22 +146,20 @@ namespace N_Puzzle
 
         int manhattan(int[,] mat)
         {
-            int miss = 0;
+            int sum = 0;
             for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j < n; j++)
                 {
-                    for (int c = 0; c < n; c++)
+                    if (mat[i, j] != 0)
                     {
-                        for (int k = 0; k < n; k++)
-                        {
-                            if (goal[i, j] == mat[c, k])
-                                miss += Math.Abs(i - c) + Math.Abs(j - k);
-                        }
+                        int x = (mat[i, j] - 1) / n;
+                        int y = (mat[i, j] - 1) % n;
+                        sum += Math.Abs(x - i) + Math.Abs(y - j);
                     }
                 }
             }
-            return miss;
+            return sum;
         }
 
         public int hamming(int[,] mat)
@@ -187,7 +183,9 @@ namespace N_Puzzle
             int temp = newNode.mat[x, y];
             newNode.mat[x, y] = newNode.mat[x1, y1];
             newNode.mat[x1, y1] = temp;
-            findZero(newNode);
+
+            newNode.x0 = x1;
+            newNode.y0 = y1;
             return newNode;
         }
 
@@ -213,7 +211,6 @@ namespace N_Puzzle
             }
             printroot(root.parent);
             Print(root.mat);
-            Console.WriteLine(root.depth);
         }
     }
 }
