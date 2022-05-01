@@ -111,7 +111,7 @@ namespace N_Puzzle
                 int[] aroundZeroX = new int[4] { parent.x0 - 1, parent.x0 + 1, parent.x0, parent.x0 };
                 int[] aroundZeroY = new int[4] { parent.y0, parent.y0, parent.y0 + 1, parent.y0 - 1 };
 
-                if (isGoal(parent))
+                if (parent.hValue == parent.depth)
                 {
                     if (n == 3)
                     {

@@ -17,12 +17,45 @@ namespace N_Puzzle
                 string[] completefilenames = { "15 Puzzle 1", "15 Puzzle 3", "15 Puzzle 4", "15 Puzzle 5" };
                 string[] completefilenames2 = { "50 Puzzle", "99 Puzzle - 1", "99 Puzzle - 2", "9999 Puzzle" };
                 Console.WriteLine("Sample : ");
-                foreach (string name in samplefilenames)
-                {
-                    string solvedSample = @"Sample Test/Solvable Puzzles/" + name + @".txt";
+                //foreach (string name in samplefilenames)
+                //{
+                //    string solvedSample = @"Sample Test/Solvable Puzzles/" + name + @".txt";
 
+                //    List<int> lis = new List<int>();
+                //    string[] s = File.ReadAllLines(solvedSample);
+                //    int n = int.Parse(s[0]);
+                //    NPuzzle nPuzzle = new NPuzzle(n);
+                //    int c = 0;
+                //    for (int i = 2; i < s.Length; i++)
+                //    {
+                //        string[] k = s[i].Split(' ');
+                //        for (int j = 0; j < k.Length; j++)
+                //        {
+                //            if (!k[j].Equals(""))
+                //            {
+                //                int result = 0;
+                //                int.TryParse(k[j], out result);
+                //                lis.Add(result);
+                //                nPuzzle.matrix[c, j] = result;
+                //            }
+                //        }
+                //        c++;
+                //    }
+
+                //    Console.WriteLine(nPuzzle.isSolvable(lis) ? "Solvable" : "not Solvable");
+                //    nPuzzle.solveHamming();
+                //    Console.WriteLine();
+
+                //}
+
+                Console.WriteLine("#####################################");
+                Console.WriteLine("Complete : ");
+
+                foreach (string name in completefilenames)
+                {
+                    string solvedComplete = @"Complete Test/Complete Test/Solvable puzzles/Manhattan Only/" + name + @".txt";
                     List<int> lis = new List<int>();
-                    string[] s = File.ReadAllLines(solvedSample);
+                    string[] s = File.ReadAllLines(solvedComplete);
                     int n = int.Parse(s[0]);
                     NPuzzle nPuzzle = new NPuzzle(n);
                     int c = 0;
@@ -45,15 +78,12 @@ namespace N_Puzzle
                     Console.WriteLine(nPuzzle.isSolvable(lis) ? "Solvable" : "not Solvable");
                     nPuzzle.solveHamming();
                     Console.WriteLine();
-
                 }
 
-                Console.WriteLine("#####################################");
-                //Console.WriteLine("Complete : ");
-
-                //foreach (string name in completefilenames)
+                //foreach (string name in completefilenames2)
                 //{
-                //    string solvedComplete = @"Complete Test/Complete Test/Solvable puzzles/Manhattan Only/" + name + @".txt";
+                //    string solvedComplete = @"Complete Test/Complete Test/Solvable puzzles/Manhattan & Hamming/" + name + @".txt";
+
                 //    List<int> lis = new List<int>();
                 //    string[] s = File.ReadAllLines(solvedComplete);
                 //    int n = int.Parse(s[0]);
@@ -77,35 +107,6 @@ namespace N_Puzzle
 
                 //    Console.WriteLine(nPuzzle.isSolvable(lis) ? "Solvable" : "not Solvable");
                 //    nPuzzle.solveHamming();
-                //    Console.WriteLine();
-                //}
-
-                //foreach (string name in completefilenames2)
-                //{
-                //    string solvedComplete = @"/Complete/Complete Test/Complete Test/Solvable puzzles/Manhattan & Hamming/" + name + @".txt";
-
-                //    List<int> lis = new List<int>();
-                //    string[] s = File.ReadAllLines(solvedComplete);
-                //    int n = int.Parse(s[0]);
-                //    NPuzzle nPuzzle = new NPuzzle(n);
-                //    int c = 0;
-                //    for (int i = 2; i < s.Length; i++)
-                //    {
-                //        string[] k = s[i].Split(' ');
-                //        for (int j = 0; j < k.Length; j++)
-                //        {
-                //            if (!k[j].Equals(""))
-                //            {
-                //                int result = 0;
-                //                int.TryParse(k[j], out result);
-                //                lis.Add(result);
-                //                nPuzzle.matrix[c, j] = result;
-                //            }
-                //        }
-                //        c++;
-                //    }
-
-                //    Console.WriteLine(nPuzzle.isSolvable(lis) ? "Solvable" : "not Solvable");
                 //    Console.WriteLine();
                 //}
             }
