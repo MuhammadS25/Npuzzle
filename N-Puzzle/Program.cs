@@ -19,7 +19,7 @@ namespace N_Puzzle
                 Console.WriteLine("Sample : ");
                 foreach (string name in samplefilenames)
                 {
-                    string solvedSample = @"Sample Test/Solvable Puzzles/8 Puzzle (1).txt";
+                    string solvedSample = @"Sample Test/Solvable Puzzles/"+name+@".txt";
 
                     List<int> lis = new List<int>();
                     string[] s = File.ReadAllLines(solvedSample);
@@ -37,11 +37,6 @@ namespace N_Puzzle
                                 int.TryParse(k[j], out result);
                                 lis.Add(result);
                                 nPuzzle.matrix[c, j] = result;
-                                if (nPuzzle.matrix[c, j] == 0)
-                                {
-                                    nPuzzle.x0 = c;
-                                    nPuzzle.y0 = j;
-                                }
                             }
                         }
                         c++;
@@ -50,7 +45,6 @@ namespace N_Puzzle
                     Console.WriteLine(nPuzzle.isSolvable(lis) ? "Solvable" : "not Solvable");
                     nPuzzle.solveHamming();
                     Console.WriteLine();
-                    break;
 
                 }
 

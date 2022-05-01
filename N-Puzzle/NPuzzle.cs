@@ -8,10 +8,7 @@ namespace N_Puzzle
     {
         public int[,] matrix;
         public int[,] goal;
-        public int depth;
         int n;
-        public int x0;
-        public int y0;
 
         public NPuzzle(int n)
         {
@@ -99,45 +96,56 @@ namespace N_Puzzle
         public void solveHamming()
         {
             PriorityQueue priorityQueue = new PriorityQueue();
-            HashSet<UInt64> set = new HashSet<UInt64>();
-            Node parent = new Node();
-            parent.mat = (int[,])matrix.Clone();
+            HashSet<string> set = new HashSet<string>();
+            Node parent = new Node(matrix, 0, null);
             parent.setState();
-            do
-            {                                    /*up*/  /*down*/     /*left*/          /*right*/
-                findZero(parent);
+            findZero(parent);
+            parent.hValue = hamming(parent.mat);
+            set.Add(parent.state);
+            priorityQueue.push(parent);
+            while (priorityQueue.getSize() != 0)
+            {
+                parent = priorityQueue.pop();
+
                 int[] aroundZeroX = new int[4] { parent.x0 - 1, parent.x0 + 1, parent.x0, parent.x0 };
                 int[] aroundZeroY = new int[4] { parent.y0, parent.y0, parent.y0 - 1, parent.y0 + 1 };
-                set.Add(parent.state);
-                depth++;
+
+                if (parent.hValue == 0)
+                {
+                    if (n == 3)
+                    {
+                        printroot(parent);
+                    }
+                    else
+                    {
+                        Console.WriteLine(parent.depth);
+                    }
+                    break;
+                }
+
                 for (int i = 0; i < 4; i++)
                 {
                     try
                     {
                         Node newNode = Swap(parent.x0, parent.y0, aroundZeroX[i], aroundZeroY[i], parent);
                         newNode.setState();
+                        newNode.parent = parent;
                         if (!set.Contains(newNode.state))
                         {
                             set.Add(newNode.state);
-                            newNode.depth = depth;
-                            newNode.hValue = hamming(newNode.mat) + newNode.depth;
+                            newNode.depth = parent.depth + 1;
+                            newNode.hValue = manhattan(newNode.mat);
                             priorityQueue.push(newNode);
-                            //Print(newNode.mat);
                         }
 
-                        //Print(node.mat);
-                        //Console.WriteLine("im here -------------------------------------");
                     }
                     catch
                     {
                         continue;
                     }
                 }
-                parent = priorityQueue.pop();
-                Print(parent.mat);
-                //Console.WriteLine(no.depth);
-                if (isGoal(parent)) break;
-            } while (priorityQueue.getSize() != 0);
+                
+            }
         }
 
         int manhattan(int[,] mat)
@@ -167,7 +175,7 @@ namespace N_Puzzle
             {
                 for (int j = 0; j < n; j++)
                 {
-                    if (mat[i,j] != 0 && mat[i, j] != goal[i,j])
+                    if (mat[i, j] != 0 && mat[i, j] != goal[i, j])
                         misPlaced++;
                 }
             }
@@ -177,7 +185,7 @@ namespace N_Puzzle
 
         Node Swap(int x, int y, int x1, int y1, Node node)
         {
-            Node newNode = new Node(node);
+            Node newNode = new Node(node.mat, node.depth+1 ,node);
             int temp = newNode.mat[x, y];
             newNode.mat[x, y] = newNode.mat[x1, y1];
             newNode.mat[x1, y1] = temp;
@@ -197,6 +205,17 @@ namespace N_Puzzle
             }
 
             Console.WriteLine();
+        }
+
+        void printroot(Node root)
+        {
+            if (root == null)
+            {
+                return;
+            }
+            printroot(root.parent);
+            Print(root.mat);
+            Console.WriteLine(root.depth);
         }
     }
 }
