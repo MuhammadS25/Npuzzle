@@ -19,8 +19,8 @@ namespace N_Puzzle
                 Console.WriteLine("Sample : ");
                 foreach (string name in samplefilenames)
                 {
-                    string solvedSample = @"Sample Test/Solvable Puzzles/" + name + @".txt";
-                    
+                    string solvedSample = @"Sample Test/Solvable Puzzles/8 Puzzle (1).txt";
+
                     List<int> lis = new List<int>();
                     string[] s = File.ReadAllLines(solvedSample);
                     int n = int.Parse(s[0]);
@@ -37,7 +37,7 @@ namespace N_Puzzle
                                 int.TryParse(k[j], out result);
                                 lis.Add(result);
                                 nPuzzle.matrix[c, j] = result;
-                                if(nPuzzle.matrix[c,j] == 0)
+                                if (nPuzzle.matrix[c, j] == 0)
                                 {
                                     nPuzzle.x0 = c;
                                     nPuzzle.y0 = j;
@@ -50,17 +50,16 @@ namespace N_Puzzle
                     Console.WriteLine(nPuzzle.isSolvable(lis) ? "Solvable" : "not Solvable");
                     nPuzzle.solveHamming();
                     Console.WriteLine();
-
+                    break;
 
                 }
 
                 Console.WriteLine("#####################################");
-                Console.WriteLine("Complete : ");
+                //Console.WriteLine("Complete : ");
 
                 //foreach (string name in completefilenames)
                 //{
-                //    string solvedComplete = @"/Complete Test/Complete Test/Solvable puzzles/Manhattan Only/" + name + @".txt";
-                    
+                //    string solvedComplete = @"Complete Test/Complete Test/Solvable puzzles/Manhattan Only/" + name + @".txt";
                 //    List<int> lis = new List<int>();
                 //    string[] s = File.ReadAllLines(solvedComplete);
                 //    int n = int.Parse(s[0]);
@@ -83,13 +82,14 @@ namespace N_Puzzle
                 //    }
 
                 //    Console.WriteLine(nPuzzle.isSolvable(lis) ? "Solvable" : "not Solvable");
+                //    nPuzzle.solveHamming();
                 //    Console.WriteLine();
                 //}
 
                 //foreach (string name in completefilenames2)
                 //{
                 //    string solvedComplete = @"/Complete/Complete Test/Complete Test/Solvable puzzles/Manhattan & Hamming/" + name + @".txt";
-                    
+
                 //    List<int> lis = new List<int>();
                 //    string[] s = File.ReadAllLines(solvedComplete);
                 //    int n = int.Parse(s[0]);

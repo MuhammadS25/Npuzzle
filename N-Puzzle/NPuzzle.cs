@@ -7,6 +7,7 @@ namespace N_Puzzle
     class NPuzzle
     {
         public int[,] matrix;
+        public int[,] goal;
         public int depth;
         int n;
         public int x0;
@@ -16,20 +17,35 @@ namespace N_Puzzle
         {
             this.n = n;
             matrix = new int[n, n];
-        }
-        
-        public bool isSolvable(List<int> lis)
-        { 
-            int inversion = 0;
-            for(int x = 0 ; x < n*n-1 ; x++)
+            goal = new int[n, n];
+            int temp = 1;
+
+            for (int i = 0; i < n; i++)
             {
-                for(int y = x + 1 ; y < n*n ; y++)
+                for (int j = 0; j < n; j++)
+                {
+                    if (temp != n * n)
+                    {
+                        goal[i, j] = temp;
+                        temp++;
+                    }
+                    else goal[i, j] = 0;
+                }
+            }
+        }
+
+        public bool isSolvable(List<int> lis)
+        {
+            int inversion = 0;
+            for (int x = 0; x < n * n - 1; x++)
+            {
+                for (int y = x + 1; y < n * n; y++)
                 {
                     if (lis[y] != 0 && lis[x] != 0 && (lis[x] > lis[y]))
                     {
                         inversion++;
                     }
-                        
+
                 }
             }
 
@@ -42,58 +58,106 @@ namespace N_Puzzle
                 int index = 0;
                 for (int i = n - 1; i >= 0; i--)
                     for (int j = n - 1; j >= 0; j--)
-                        if (matrix[i,j] == 0)
-                            index = n-i;
+                        if (matrix[i, j] == 0)
+                            index = n - i;
 
-                if ((index % 2 == 0 && inversion %2 == 0 )|| (index % 2 != 0 && inversion % 2 != 0)) return false;
+                if ((index % 2 == 0 && inversion % 2 == 0) || (index % 2 != 0 && inversion % 2 != 0)) return false;
             }
-            return true; 
+            return true;
         }
 
+        bool isGoal(Node parent)
+        {
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    if (parent.mat[i, j] != goal[i, j])
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        void findZero(Node node)
+        {
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    if (node.mat[i, j] == 0)
+                    {
+                        node.x0 = i;
+                        node.y0 = j;
+                    }
+                }
+            }
+        }
 
         public void solveHamming()
         {
-
-            while (hamming(matrix) != 1)
-            {                                  /*up*//*down*/ /*left*/  /*right*/
-                int[] aroundZeroX = new int[4] { x0 - 1, x0 + 1, x0,     x0 };
-                int[] aroundZeroY = new int[4] { y0,     y0,     y0 - 1, y0 + 1 };
-                PriorityQueue priorityQueue = new PriorityQueue();
+            PriorityQueue priorityQueue = new PriorityQueue();
+            HashSet<UInt64> set = new HashSet<UInt64>();
+            Node parent = new Node();
+            parent.mat = (int[,])matrix.Clone();
+            parent.setState();
+            do
+            {                                    /*up*/  /*down*/     /*left*/          /*right*/
+                findZero(parent);
+                int[] aroundZeroX = new int[4] { parent.x0 - 1, parent.x0 + 1, parent.x0, parent.x0 };
+                int[] aroundZeroY = new int[4] { parent.y0, parent.y0, parent.y0 - 1, parent.y0 + 1 };
+                set.Add(parent.state);
                 depth++;
-                for ( int i = 0; i < 4; i++)
+                for (int i = 0; i < 4; i++)
                 {
                     try
                     {
-                        Node node = new Node();
-                        node.mat = (int[,]) matrix.Clone();
-                        Swap(x0, y0, aroundZeroX[i], aroundZeroY[i], node);
-                        node.hValue = hamming(node.mat) + depth;
-                        priorityQueue.push(node);
-                        
+                        Node newNode = Swap(parent.x0, parent.y0, aroundZeroX[i], aroundZeroY[i], parent);
+                        newNode.setState();
+                        if (!set.Contains(newNode.state))
+                        {
+                            set.Add(newNode.state);
+                            newNode.depth = depth;
+                            newNode.hValue = hamming(newNode.mat) + newNode.depth;
+                            priorityQueue.push(newNode);
+                            //Print(newNode.mat);
+                        }
+
                         //Print(node.mat);
+                        //Console.WriteLine("im here -------------------------------------");
                     }
                     catch
                     {
                         continue;
                     }
                 }
-                Node no = priorityQueue.pop();
-                matrix = no.mat;
-                x0 = no.x0;
-                y0 = no.y0;
-                if (n == 3)
-                {
-                    Print(matrix);
-                    Console.WriteLine(depth);
-                }
-            }
-
-            
+                parent = priorityQueue.pop();
+                Print(parent.mat);
+                //Console.WriteLine(no.depth);
+                if (isGoal(parent)) break;
+            } while (priorityQueue.getSize() != 0);
         }
 
-        int manhattan(int x, int x2, int y, int y2)
+        int manhattan(int[,] mat)
         {
-            return Math.Abs(x - x2) + Math.Abs(y - y2);
+            int miss = 0;
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    for (int c = 0; c < n; c++)
+                    {
+                        for (int k = 0; k < n; k++)
+                        {
+                            if (goal[i, j] == mat[c, k])
+                                miss += Math.Abs(i - c) + Math.Abs(j - k);
+                        }
+                    }
+                }
+            }
+            return miss;
         }
 
         public int hamming(int[,] mat)
@@ -101,10 +165,10 @@ namespace N_Puzzle
             int misPlaced = 0, temp = 1;
             for (int i = 0; i < n; i++)
             {
-                for(int j = 0; j < n; j++)
+                for (int j = 0; j < n; j++)
                 {
-                    if (mat[i, j] != temp) 
-                            misPlaced++;
+                    if (mat[i, j] != temp)
+                        misPlaced++;
                     temp++;
                 }
             }
@@ -112,13 +176,14 @@ namespace N_Puzzle
             return misPlaced;
         }
 
-        void Swap(int first, int second , int third, int forth , Node node)
+        Node Swap(int x, int y, int x1, int y1, Node node)
         {
-            int temp = node.mat[first, second];
-            node.mat[first,second] = node.mat[third, forth];
-            node.mat[third, forth] = temp;
-            node.x0 = third;
-            node.y0 = forth;
+            Node newNode = new Node(node);
+            int temp = newNode.mat[x, y];
+            newNode.mat[x, y] = newNode.mat[x1, y1];
+            newNode.mat[x1, y1] = temp;
+            findZero(newNode);
+            return newNode;
         }
 
         void Print(int[,] matrix)

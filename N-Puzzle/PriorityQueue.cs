@@ -6,7 +6,7 @@ namespace N_Puzzle
 {
     class PriorityQueue { 
         
-        int size = -1;
+        int size = 0;
         List<Node> elements = new List<Node>();
         public PriorityQueue()
         {
@@ -17,7 +17,7 @@ namespace N_Puzzle
         {
             elements.Add(value);
             size++;
-            int index = size;
+            int index = size -1 ;
             while (index >= 0 && elements[(index - 1) / 2].hValue > elements[index].hValue)
             {
                 Swap(index, (index - 1) / 2);
@@ -28,8 +28,8 @@ namespace N_Puzzle
         public Node pop()
         {
             Node value = elements[0];
-            elements[0] = elements[size];
-            elements.RemoveAt(size);
+            elements[0] = elements[size-1];
+            elements.RemoveAt(size-1);
             size--;
             heapifyMin(0);
             return value;
@@ -42,9 +42,9 @@ namespace N_Puzzle
 
             int highest = index;
 
-            if (left <= size && elements[highest].hValue > elements[left].hValue)
+            if (left < size && elements[highest].hValue > elements[left].hValue)
                 highest = left;
-            if (right <= size && elements[highest].hValue > elements[right].hValue)
+            if (right < size && elements[highest].hValue > elements[right].hValue)
                 highest = right;
 
             if (highest != index)
