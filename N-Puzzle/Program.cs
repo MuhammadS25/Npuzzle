@@ -12,17 +12,17 @@ namespace N_Puzzle
             Console.WriteLine("SampleTest [1] : \nCompleteTest [2] : \nVeryLargeTest[3] :");
             int diff = int.Parse(Console.ReadLine());
             
-
+            int type = 0;
             switch (diff)
             {
                 case 1 :
-		    Console.WriteLine("Solvable[1] : \nNotSolvable[2] :");
-		    int type = int.Parse(Console.ReadLine());
+                    Console.WriteLine("Solvable[1] : \nNotSolvable[2] :");
+                    type = int.Parse(Console.ReadLine());
                     SampleTest(type);
                     break;
                 case 2:
                     Console.WriteLine("Solvable[1] : \nNotSolvable[2] :");
-            	    int type = int.Parse(Console.ReadLine());
+                    type = int.Parse(Console.ReadLine());
                     CompleteTest(type);
                     break;
                 default:
