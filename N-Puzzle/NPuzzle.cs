@@ -8,13 +8,16 @@ namespace N_Puzzle
     {
         public int[,] matrix;
         public int[,] goal;
-        int n;
+        int n, methodType;
         public int x0, y0;
 
+        
 
-        public NPuzzle(int n)
+
+        public NPuzzle(int n, int methodType)
         {
             this.n = n;
+            this.methodType = methodType;
             matrix = new int[n, n];
             goal = new int[n, n];
             int temp = 1;
@@ -65,37 +68,21 @@ namespace N_Puzzle
             return true;
         }
 
-        bool isGoal(Node parent)
-        {
-            for (int i = 0; i < n; i++)
-            {
-                for (int j = 0; j < n; j++)
-                {
-                    if (parent.mat[i, j] != goal[i, j])
-                    {
-                        return false;
-                    }
-                }
+        int method(int type, Node node){
+
+            int value = 0;
+
+            if(type == 0){
+                value = hamming(node.mat) + node.depth;
             }
-            return true;
+            else{
+                value = manhattan(node.mat) + node.depth;
+            }
+
+            return value;
         }
 
-        void findZero(Node node)
-        {
-            for (int i = 0; i < n; i++)
-            {
-                for (int j = 0; j < n; j++)
-                {
-                    if (node.mat[i, j] == 0)
-                    {
-                        node.x0 = i;
-                        node.y0 = j;
-                    }
-                }
-            }
-        }
-
-        public void solveHamming()
+        public void solve()
         {
             PriorityQueue priorityQueue = new PriorityQueue();
             HashSet<string> set = new HashSet<string>();
@@ -114,7 +101,7 @@ namespace N_Puzzle
                 int[] aroundZeroX = new int[4] { parent.x0 - 1, parent.x0 + 1, parent.x0, parent.x0 };
                 int[] aroundZeroY = new int[4] { parent.y0, parent.y0, parent.y0 + 1, parent.y0 - 1 };
                 //Print(parent.mat);
-                if (isGoal(parent))
+                if (parent.hValue == parent.depth)
                 {
                     if( n == 3)
                         printroot(parent);
@@ -131,7 +118,7 @@ namespace N_Puzzle
                         if (!set.Contains(newNode.state))
                         {
                             set.Add(newNode.state);
-                            newNode.hValue = manhattan(newNode.mat) + newNode.depth ;
+                            newNode.hValue = method(methodType, newNode);
                             priorityQueue.push(newNode);
                         }
 
@@ -146,7 +133,7 @@ namespace N_Puzzle
 
         int manhattan(int[,] mat)
         {
-            int sum = 0;
+            int miss = 0;
             for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j < n; j++)
@@ -155,11 +142,11 @@ namespace N_Puzzle
                     {
                         int x = (mat[i, j] - 1) / n;
                         int y = (mat[i, j] - 1) % n;
-                        sum += Math.Abs(x - i) + Math.Abs(y - j);
+                        miss += Math.Abs(x - i) + Math.Abs(y - j);
                     }
                 }
             }
-            return sum;
+            return miss;
         }
 
         public int hamming(int[,] mat)
