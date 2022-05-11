@@ -11,8 +11,6 @@ namespace N_Puzzle
         int n, methodType;
         public int x0, y0;
 
-        
-
 
         public NPuzzle(int n, int methodType)
         {
@@ -90,7 +88,7 @@ namespace N_Puzzle
             parent.setState();
             parent.x0 = x0;
             parent.y0 = y0;
-            parent.hValue = hamming(parent.mat) ;
+            parent.hValue = method(methodType, parent); 
             set.Add(parent.state);
             priorityQueue.push(parent);
 
@@ -100,7 +98,6 @@ namespace N_Puzzle
                 parent = priorityQueue.pop();
                 int[] aroundZeroX = new int[4] { parent.x0 - 1, parent.x0 + 1, parent.x0, parent.x0 };
                 int[] aroundZeroY = new int[4] { parent.y0, parent.y0, parent.y0 + 1, parent.y0 - 1 };
-                //Print(parent.mat);
                 if (parent.hValue == parent.depth)
                 {
                     if( n == 3)
@@ -108,7 +105,6 @@ namespace N_Puzzle
                     Console.WriteLine("steps :" + parent.depth);
                     break;
                 }
-
                 for (int i = 0; i < 4; i++)
                 {
                     try

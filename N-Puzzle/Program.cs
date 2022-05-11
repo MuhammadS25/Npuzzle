@@ -31,7 +31,6 @@ namespace N_Puzzle
             }
         }
 
-
         static void SampleTest(int type)
         {
             Console.WriteLine("Sample : ");
@@ -79,7 +78,7 @@ namespace N_Puzzle
                 foreach (string name in completefilenames2)
                 {
                     string solvedComplete = @"Complete Test/Complete Test/Solvable puzzles/Manhattan & Hamming/" + name + @".txt";
-                    NPuzzle nPuzzle = ReadFile(solvedComplete, 0);
+                    NPuzzle nPuzzle = ReadFile(solvedComplete, 1);
                     nPuzzle.solve();
                     Console.WriteLine();
                 }
@@ -103,9 +102,12 @@ namespace N_Puzzle
             string veryLarge = @"Complete Test/Complete Test/V. Large test case/TEST.txt";
 
             NPuzzle nPuzzle = ReadFile(veryLarge, 1);
+            var watch = new System.Diagnostics.Stopwatch();
+            watch.Start();
             nPuzzle.solve();
+            watch.Stop();
+            Console.WriteLine($"Execution Time: {watch.Elapsed.Minutes }.{watch.Elapsed.Seconds} min");
             Console.WriteLine();
-
         }
 
         static NPuzzle ReadFile(string fileName, int methodType)

@@ -5,20 +5,19 @@ using System.Text;
 namespace N_Puzzle
 {
     class PriorityQueue { 
-        
         int size = 0;
-        List<Node> elements = new List<Node>();
+        List<Node> items = new List<Node>();
         public PriorityQueue()
         {
-            elements = new List<Node>();
+            items = new List<Node>();
         }
 
         public void push(Node value)
         {
-            elements.Add(value);
+            items.Add(value);
             size++;
-            int index = size -1 ;
-            while (index >= 0 && elements[(index - 1) / 2].hValue > elements[index].hValue)
+            int index = size - 1 ;
+            while (index >= 0 && items[(index - 1) / 2].hValue > items[index].hValue)
             {
                 Swap(index, (index - 1) / 2);
                 index = (index - 1) / 2;
@@ -27,9 +26,9 @@ namespace N_Puzzle
 
         public Node pop()
         {
-            Node value = elements[0];
-            elements[0] = elements[size-1];
-            elements.RemoveAt(size-1);
+            Node value = items[0];
+            items[0] = items[size-1];
+            items.RemoveAt(size-1);
             size--;
             heapifyMin(0);
             return value;
@@ -42,9 +41,9 @@ namespace N_Puzzle
 
             int highest = index;
 
-            if (left < size && elements[highest].hValue > elements[left].hValue)
+            if (left < size && items[highest].hValue > items[left].hValue)
                 highest = left;
-            if (right < size && elements[highest].hValue > elements[right].hValue)
+            if (right < size && items[highest].hValue > items[right].hValue)
                 highest = right;
 
             if (highest != index)
@@ -56,9 +55,9 @@ namespace N_Puzzle
 
         void Swap(int first , int second)
         {
-            Node temp = elements[first];
-            elements[first] = elements[second];
-            elements[second] = temp;
+            Node temp = items[first];
+            items[first] = items[second];
+            items[second] = temp;
         }
 
         public int getSize() { return size ; }
