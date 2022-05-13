@@ -91,7 +91,7 @@ namespace N_Puzzle
 
                 foreach (string name in completefilenames)
                 {
-                    string unsolvedComplete = @"Complete Test/Complete Test/Unsolvable puzzles/" + name + @".txt";
+                    string unsolvedComplete = @"Complete Test/Unsolvable puzzles/" + name + @".txt";
                     NPuzzle nPuzzle = ReadFile(unsolvedComplete, 0);
                     Console.WriteLine();
                 }

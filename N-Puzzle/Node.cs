@@ -14,5 +14,13 @@ namespace N_Puzzle
         public string state;
         public int n;
         public Node parent;
+
+        public Node(int depth, string state, Node parent, int n)
+        {
+            this.depth = depth;
+            this.state = state;
+            this.parent = parent;
+            this.n = n;
+        }
     }
 }

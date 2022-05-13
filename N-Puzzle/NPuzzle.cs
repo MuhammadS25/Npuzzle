@@ -70,9 +70,8 @@ namespace N_Puzzle
 
         public void solve()
         {
-            Node parent = new Node();
+            Node parent = new(0,"",null,n);
             parent.mat = matrix;
-            parent.n = n;
             parent.state = setState(parent.mat);
             parent.x0 = x0;
             parent.y0 = y0;
@@ -163,16 +162,10 @@ namespace N_Puzzle
 
         Node generate(int x, int y, int x1, int y1, string state,Node node)
         {
-            Node newNode = new Node();
+            Node newNode = new(node.depth + 1, state, node, n);
             newNode.mat = node.mat.Clone() as int[,];
-            newNode.depth = node.depth + 1;
-            newNode.parent = node;
-            newNode.n = n;
-            
             newNode.mat[x, y] = newNode.mat[x1, y1];
             newNode.mat[x1, y1] = 0;
-            newNode.state = state;
-
             newNode.x0 = x1;
             newNode.y0 = y1;
             return newNode;
