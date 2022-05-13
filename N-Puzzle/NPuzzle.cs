@@ -146,7 +146,7 @@ namespace N_Puzzle
             {
                 for (int j = 0; j < n; j++)
                 {
-                    if (mat[i, j] != 0 && mat[i, j] != (1 + j + (i % n) * n))
+                    if (mat[i, j] != 0 && mat[i, j] != (1 + j + (i * n)))
                         misPlaced++;
                     temp++;
                 }
