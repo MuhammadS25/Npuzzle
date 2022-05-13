@@ -9,6 +9,8 @@ namespace N_Puzzle
         public int[,] matrix;
         int n, methodType;
         public int x0, y0;
+        int[] aroundX = { -1, 1, 0, 0 };
+        int[] aroundY = { 0, 0, -1, 1 };
         PriorityQueue priorityQueue = new PriorityQueue();
         HashSet<string> set = new HashSet<string>();
 
@@ -71,7 +73,7 @@ namespace N_Puzzle
             Node parent = new Node();
             parent.mat = matrix;
             parent.n = n;
-            parent.state = setState(parent);
+            parent.state = setState(parent.mat);
             parent.x0 = x0;
             parent.y0 = y0;
             parent.hValue = method(methodType, parent); 
@@ -92,37 +94,29 @@ namespace N_Puzzle
             Console.WriteLine("steps :" + parent.depth);
         }
 
-        void childFactory(Node parent)
-        {    
-            if (parent.x0 - 1 >= 0)
-            {
-                Node newNode = Swap(parent.x0, parent.y0, parent.x0 - 1, parent.y0, parent);
-                child(newNode);
-            }
-            if (parent.x0 + 1 < n)
-            {
-                Node newNode = Swap(parent.x0, parent.y0, parent.x0 + 1, parent.y0, parent);
-                child(newNode);
-            }
-            if (parent.y0 + 1 < n)
-            {
-                Node newNode = Swap(parent.x0, parent.y0, parent.x0, parent.y0 + 1, parent);
-                child(newNode);
-            }
-            if (parent.y0 - 1 >= 0)
-            {
-                Node newNode = Swap(parent.x0, parent.y0, parent.x0, parent.y0 - 1, parent);
-                child(newNode);
-            }
+        bool permissionToGo(int x , int y)
+        {
+            if (x < 0 || y < 0 || x >= n || y >= n) return false;
+            return true;
         }
 
-        void child(Node newNode)
+        void childFactory(Node parent)
         {
-            if (!set.Contains(newNode.state))
+            for (int i = 0; i < 4; i++)
             {
-                set.Add(newNode.state);
-                newNode.hValue = method(methodType, newNode);
-                priorityQueue.push(newNode);
+                if (permissionToGo(parent.x0 + aroundX[i], parent.y0 + aroundY[i]))
+                {
+                    int[,] temp = parent.mat.Clone() as int[,];
+                    Swap(temp,parent.x0 + aroundX[i], parent.y0 + aroundY[i], parent);
+                    string s = setState(temp);
+                    if (!set.Contains(s))
+                    {
+                        Node newNode = generate(parent.x0, parent.y0, parent.x0 + aroundX[i], parent.y0 + aroundY[i], s, parent);
+                        set.Add(newNode.state);
+                        newNode.hValue = method(methodType, newNode);
+                        priorityQueue.push(newNode);
+                    }
+                }
             }
         }
 
@@ -161,7 +155,13 @@ namespace N_Puzzle
             return misPlaced;
         }
 
-        Node Swap(int x, int y, int x1, int y1, Node node)
+        void Swap(int[,] mat , int x , int y , Node parent)
+        {
+            mat[parent.x0, parent.y0] = mat[x, y];
+            mat[x, y] = 0;
+        }
+
+        Node generate(int x, int y, int x1, int y1, string state,Node node)
         {
             Node newNode = new Node();
             newNode.mat = node.mat.Clone() as int[,];
@@ -171,7 +171,7 @@ namespace N_Puzzle
             
             newNode.mat[x, y] = newNode.mat[x1, y1];
             newNode.mat[x1, y1] = 0;
-            newNode.state = setState(newNode);
+            newNode.state = state;
 
             newNode.x0 = x1;
             newNode.y0 = y1;
@@ -202,14 +202,14 @@ namespace N_Puzzle
             Print(root.mat);
         }
 
-        public string setState(Node node)
+        public string setState(int[,] matrix)
         {
             string state = "";
             for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j < n; j++)
                 {
-                    state += node.mat[i, j];
+                    state += matrix[i, j];
                 }
             }
             return state;

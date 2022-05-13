@@ -70,7 +70,7 @@ namespace N_Puzzle
                 
                 foreach (string name in completefilenames)
                 {
-                    string solvedComplete = @"Complete Test/Complete Test/Solvable puzzles/Manhattan Only/" + name + @".txt";
+                    string solvedComplete = @"Complete Test/Solvable puzzles/Manhattan Only/" + name + @".txt";
                     NPuzzle nPuzzle =  ReadFile(solvedComplete, 1);
                     nPuzzle.solve();
                     Console.WriteLine();
@@ -78,7 +78,7 @@ namespace N_Puzzle
 
                 foreach (string name in completefilenames2)
                 {
-                    string solvedComplete = @"Complete Test/Complete Test/Solvable puzzles/Manhattan & Hamming/" + name + @".txt";
+                    string solvedComplete = @"Complete Test/Solvable puzzles/Manhattan & Hamming/" + name + @".txt";
                     NPuzzle nPuzzle = ReadFile(solvedComplete, 1);
                     nPuzzle.solve();
                     Console.WriteLine();
@@ -100,7 +100,7 @@ namespace N_Puzzle
 
         static void VeryLargeTest()
         {
-            string veryLarge = @"Complete Test/Complete Test/V. Large test case/TEST.txt";
+            string veryLarge = @"Complete Test/V. Large test case/TEST.txt";
 
             NPuzzle nPuzzle = ReadFile(veryLarge, 1);
             Stopwatch watch = new Stopwatch();
