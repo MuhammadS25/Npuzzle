@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Diagnostics;
 
 namespace N_Puzzle
 {
@@ -102,7 +103,7 @@ namespace N_Puzzle
             string veryLarge = @"Complete Test/Complete Test/V. Large test case/TEST.txt";
 
             NPuzzle nPuzzle = ReadFile(veryLarge, 1);
-            var watch = new System.Diagnostics.Stopwatch();
+            Stopwatch watch = new Stopwatch();
             watch.Start();
             nPuzzle.solve();
             watch.Stop();
@@ -117,7 +118,10 @@ namespace N_Puzzle
             int n = int.Parse(s[0]);
             NPuzzle nPuzzle = new NPuzzle(n, methodType);
             int c = 0;
-            for (int i = 2; i < s.Length; i++)
+            int i = 0;
+            if (s[1] == "") i = 2;
+            else i = 1;
+            for (; i < s.Length; i++)
             {
                 string[] k = s[i].Split(' ');
                 for (int j = 0; j < k.Length; j++)

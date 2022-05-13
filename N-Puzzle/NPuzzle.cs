@@ -7,9 +7,10 @@ namespace N_Puzzle
     class NPuzzle
     {
         public int[,] matrix;
-        public int[,] goal;
         int n, methodType;
         public int x0, y0;
+        PriorityQueue priorityQueue = new PriorityQueue();
+        HashSet<string> set = new HashSet<string>();
 
 
         public NPuzzle(int n, int methodType)
@@ -17,21 +18,6 @@ namespace N_Puzzle
             this.n = n;
             this.methodType = methodType;
             matrix = new int[n, n];
-            goal = new int[n, n];
-            int temp = 1;
-
-            for (int i = 0; i < n; i++)
-            {
-                for (int j = 0; j < n; j++)
-                {
-                    if (temp != n * n)
-                    {
-                        goal[i, j] = temp;
-                        temp++;
-                    }
-                    else goal[i, j] = 0;
-                }
-            }
         }
 
         public bool isSolvable(List<int> lis)
@@ -82,48 +68,61 @@ namespace N_Puzzle
 
         public void solve()
         {
-            PriorityQueue priorityQueue = new PriorityQueue();
-            HashSet<string> set = new HashSet<string>();
-            Node parent = new Node(matrix, 0, null);
-            parent.setState();
+            Node parent = new Node();
+            parent.mat = matrix;
+            parent.n = n;
+            parent.state = setState(parent);
             parent.x0 = x0;
             parent.y0 = y0;
             parent.hValue = method(methodType, parent); 
             set.Add(parent.state);
             priorityQueue.push(parent);
 
-
             while (priorityQueue.getSize() != 0)
             {
-                parent = priorityQueue.pop();
-                int[] aroundZeroX = new int[4] { parent.x0 - 1, parent.x0 + 1, parent.x0, parent.x0 };
-                int[] aroundZeroY = new int[4] { parent.y0, parent.y0, parent.y0 + 1, parent.y0 - 1 };
                 if (parent.hValue == parent.depth)
-                {
-                    if( n == 3)
-                        printroot(parent);
-                    Console.WriteLine("steps :" + parent.depth);
                     break;
-                }
-                for (int i = 0; i < 4; i++)
-                {
-                    try
-                    {
-                        Node newNode = Swap(parent.x0, parent.y0, aroundZeroX[i], aroundZeroY[i], parent);
-                        newNode.setState();
-                        if (!set.Contains(newNode.state))
-                        {
-                            set.Add(newNode.state);
-                            newNode.hValue = method(methodType, newNode);
-                            priorityQueue.push(newNode);
-                        }
 
-                    }
-                    catch
-                    {
-                        continue;
-                    }
-                }
+                parent = priorityQueue.pop();
+                childFactory(parent);
+            }
+
+            if (n == 3)
+                printroot(parent);
+            Console.WriteLine("steps :" + parent.depth);
+        }
+
+        void childFactory(Node parent)
+        {    
+            if (parent.x0 - 1 >= 0)
+            {
+                Node newNode = Swap(parent.x0, parent.y0, parent.x0 - 1, parent.y0, parent);
+                child(newNode);
+            }
+            if (parent.x0 + 1 < n)
+            {
+                Node newNode = Swap(parent.x0, parent.y0, parent.x0 + 1, parent.y0, parent);
+                child(newNode);
+            }
+            if (parent.y0 + 1 < n)
+            {
+                Node newNode = Swap(parent.x0, parent.y0, parent.x0, parent.y0 + 1, parent);
+                child(newNode);
+            }
+            if (parent.y0 - 1 >= 0)
+            {
+                Node newNode = Swap(parent.x0, parent.y0, parent.x0, parent.y0 - 1, parent);
+                child(newNode);
+            }
+        }
+
+        void child(Node newNode)
+        {
+            if (!set.Contains(newNode.state))
+            {
+                set.Add(newNode.state);
+                newNode.hValue = method(methodType, newNode);
+                priorityQueue.push(newNode);
             }
         }
 
@@ -148,12 +147,14 @@ namespace N_Puzzle
         public int hamming(int[,] mat)
         {
             int misPlaced = 0;
+            int temp = 0;
             for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j < n; j++)
                 {
-                    if (mat[i, j] != 0 && mat[i, j] != goal[i, j])
+                    if (mat[i, j] != 0 && mat[i, j] != (1 + j + (i % n) * n))
                         misPlaced++;
+                    temp++;
                 }
             }
 
@@ -162,10 +163,15 @@ namespace N_Puzzle
 
         Node Swap(int x, int y, int x1, int y1, Node node)
         {
-            Node newNode = new Node(node.mat, node.depth+1 ,node);
-            int temp = newNode.mat[x, y];
+            Node newNode = new Node();
+            newNode.mat = node.mat.Clone() as int[,];
+            newNode.depth = node.depth + 1;
+            newNode.parent = node;
+            newNode.n = n;
+            
             newNode.mat[x, y] = newNode.mat[x1, y1];
-            newNode.mat[x1, y1] = temp;
+            newNode.mat[x1, y1] = 0;
+            newNode.state = setState(newNode);
 
             newNode.x0 = x1;
             newNode.y0 = y1;
@@ -194,6 +200,19 @@ namespace N_Puzzle
             }
             printroot(root.parent);
             Print(root.mat);
+        }
+
+        public string setState(Node node)
+        {
+            string state = "";
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    state += node.mat[i, j];
+                }
+            }
+            return state;
         }
     }
 }
