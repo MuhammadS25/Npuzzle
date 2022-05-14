@@ -95,7 +95,7 @@ namespace N_Puzzle
 
         bool permissionToGo(int x , int y)
         {
-            if (x < 0 || y < 0 || x >= n || y >= n) return false;
+            if (x < 0 || y < 0 || x > n - 1 || y > n - 1) return false;
             return true;
         }
 

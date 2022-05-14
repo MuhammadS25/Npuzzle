@@ -7,12 +7,14 @@ namespace N_Puzzle
 {
     class Program
     {
+        static int DISTANCE_TYPE;
         static void Main(string[] args)
         {
 
             Console.WriteLine("SampleTest [1] : \nCompleteTest [2] : \nVeryLargeTest[3] :");
             int diff = int.Parse(Console.ReadLine());
-            
+            Console.WriteLine("Hamming [0] : \nManhattan [1] :");
+            DISTANCE_TYPE = int.Parse(Console.ReadLine());
             int type = 0;
             switch (diff)
             {
@@ -42,7 +44,7 @@ namespace N_Puzzle
                 foreach (string name in samplefilenames)
                 {
                     string solvedSample = @"Sample Test/Solvable Puzzles/" + name + @".txt";
-                    NPuzzle nPuzzle = ReadFile(solvedSample, 0);
+                    NPuzzle nPuzzle = ReadFile(solvedSample, DISTANCE_TYPE);
                     nPuzzle.solve();
                     Console.WriteLine();
 
@@ -54,7 +56,7 @@ namespace N_Puzzle
                 foreach (string name in samplefilenames)
                 {
                     string unsolvedSample = @"Sample Test/Unsolvable Puzzles/" + name + @".txt";
-                    NPuzzle nPuzzle = ReadFile(unsolvedSample, 0);
+                    ReadFile(unsolvedSample);
                     Console.WriteLine();
                 }
             }
@@ -72,15 +74,23 @@ namespace N_Puzzle
                 {
                     string solvedComplete = @"Complete Test/Solvable puzzles/Manhattan Only/" + name + @".txt";
                     NPuzzle nPuzzle =  ReadFile(solvedComplete, 1);
+                    Stopwatch watch = new Stopwatch();
+                    watch.Start();
                     nPuzzle.solve();
+                    watch.Stop();
+                    Console.WriteLine($"Execution time : {watch.Elapsed.TotalSeconds}");
                     Console.WriteLine();
                 }
 
                 foreach (string name in completefilenames2)
                 {
                     string solvedComplete = @"Complete Test/Solvable puzzles/Manhattan & Hamming/" + name + @".txt";
-                    NPuzzle nPuzzle = ReadFile(solvedComplete, 1);
+                    NPuzzle nPuzzle = ReadFile(solvedComplete, DISTANCE_TYPE);
+                    Stopwatch watch = new Stopwatch();
+                    watch.Start();
                     nPuzzle.solve();
+                    watch.Stop();
+                    Console.WriteLine($"Execution time : {watch.Elapsed.TotalSeconds}");
                     Console.WriteLine();
                 }
             }
@@ -92,7 +102,7 @@ namespace N_Puzzle
                 foreach (string name in completefilenames)
                 {
                     string unsolvedComplete = @"Complete Test/Unsolvable puzzles/" + name + @".txt";
-                    NPuzzle nPuzzle = ReadFile(unsolvedComplete, 0);
+                    ReadFile(unsolvedComplete);
                     Console.WriteLine();
                 }
             }
@@ -111,7 +121,7 @@ namespace N_Puzzle
             Console.WriteLine();
         }
 
-        static NPuzzle ReadFile(string fileName, int methodType)
+        static NPuzzle ReadFile(string fileName, int methodType = 1)
         {
             List<int> lis = new List<int>();
             string[] s = File.ReadAllLines(fileName);
