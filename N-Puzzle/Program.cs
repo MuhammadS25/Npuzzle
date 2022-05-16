@@ -45,7 +45,11 @@ namespace N_Puzzle
                 {
                     string solvedSample = @"Sample Test/Solvable Puzzles/" + name + @".txt";
                     NPuzzle nPuzzle = ReadFile(solvedSample, DISTANCE_TYPE);
+                    Stopwatch watch = new Stopwatch();
+                    watch.Start();
                     nPuzzle.solve();
+                    watch.Stop();
+                    Console.WriteLine($"Execution time : {watch.Elapsed.TotalSeconds} sec ");
                     Console.WriteLine();
 
                 }
@@ -78,7 +82,7 @@ namespace N_Puzzle
                     watch.Start();
                     nPuzzle.solve();
                     watch.Stop();
-                    Console.WriteLine($"Execution time : {watch.Elapsed.TotalSeconds}");
+                    Console.WriteLine($"Execution time : {watch.Elapsed.TotalSeconds} sec ");
                     Console.WriteLine();
                 }
 
@@ -90,7 +94,7 @@ namespace N_Puzzle
                     watch.Start();
                     nPuzzle.solve();
                     watch.Stop();
-                    Console.WriteLine($"Execution time : {watch.Elapsed.TotalSeconds}");
+                    Console.WriteLine($"Execution time : {watch.Elapsed.TotalSeconds} sec ");
                     Console.WriteLine();
                 }
             }
@@ -117,7 +121,7 @@ namespace N_Puzzle
             watch.Start();
             nPuzzle.solve();
             watch.Stop();
-            Console.WriteLine($"Execution Time: {watch.Elapsed.Minutes }.{watch.Elapsed.Seconds} min");
+            Console.WriteLine($"Execution Time: {watch.Elapsed.TotalSeconds} sec");
             Console.WriteLine();
         }
 

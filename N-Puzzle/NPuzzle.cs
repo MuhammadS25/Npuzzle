@@ -9,6 +9,7 @@ namespace N_Puzzle
         public int[,] matrix;
         int n, methodType;
         public int x0, y0;
+        bool first = true;
         int[] aroundX = { -1, 1, 0, 0 };
         int[] aroundY = { 0, 0, -1, 1 };
         PriorityQueue priorityQueue = new PriorityQueue();
@@ -54,7 +55,7 @@ namespace N_Puzzle
             return true;
         }
 
-        int method(int type, Node node){
+        int method(int type, Node node, int cost = 0){
 
             int value = 0;
 
@@ -62,7 +63,7 @@ namespace N_Puzzle
                 value = hamming(node.mat) + node.depth;
             }
             else{
-                value = manhattan(node.mat) + node.depth;
+                value = manhattan(node.mat , cost) + node.depth;
             }
 
             return value;
@@ -106,33 +107,40 @@ namespace N_Puzzle
                 if (permissionToGo(parent.x0 + aroundX[i], parent.y0 + aroundY[i]))
                 {
                     int[,] temp = parent.mat.Clone() as int[,];
-                    Swap(temp,parent.x0 + aroundX[i], parent.y0 + aroundY[i], parent);
+                    int cost = Swap(temp,parent.x0 + aroundX[i], parent.y0 + aroundY[i], parent , parent.depth);
                     string s = setState(temp);
                     if (!set.Contains(s))
                     {
                         Node newNode = generate(parent.x0, parent.y0, parent.x0 + aroundX[i], parent.y0 + aroundY[i], s, parent);
                         set.Add(newNode.state);
-                        newNode.hValue = method(methodType, newNode);
+                        newNode.hValue = method(methodType, newNode, cost);
                         priorityQueue.push(newNode);
                     }
                 }
             }
         }
 
-        int manhattan(int[,] mat)
+        int manhattan(int[,] mat , int cost)
         {
             int miss = 0;
-            for (int i = 0; i < n; i++)
-            {
-                for (int j = 0; j < n; j++)
+            if (first) { 
+                for (int i = 0; i < n; i++)
                 {
-                    if (mat[i, j] != 0)
+                    for (int j = 0; j < n; j++)
                     {
-                        int x = (mat[i, j] - 1) / n;
-                        int y = (mat[i, j] - 1) % n;
-                        miss += Math.Abs(x - i) + Math.Abs(y - j);
+                        if (mat[i, j] != 0)
+                        {
+                            int x = (mat[i, j] - 1) / n;
+                            int y = (mat[i, j] - 1) % n;
+                            miss += Math.Abs(x - i) + Math.Abs(y - j);
+                        }
                     }
+                        first = false;
                 }
+            }
+            else
+            {
+                miss = cost;
             }
             return miss;
         }
@@ -154,10 +162,22 @@ namespace N_Puzzle
             return misPlaced;
         }
 
-        void Swap(int[,] mat , int x , int y , Node parent)
+        int Swap(int[,] mat , int x , int y , Node parent, int depth)
         {
             mat[parent.x0, parent.y0] = mat[x, y];
+
+            int rightX = (mat[x, y] - 1) / n;
+            int rightY = (mat[x, y] - 1) % n;
+            int miss = parent.hValue - Math.Abs(rightX - x) - Math.Abs(rightY - y);
+
+            int newX = (mat[parent.x0, parent.y0] - 1) / n;
+            int newY = (mat[parent.x0, parent.y0] - 1) % n;
+
+            int cost = miss + (Math.Abs(newX - parent.x0) + Math.Abs(newY - parent.y0)) - depth;
+
             mat[x, y] = 0;
+            return cost;
+
         }
 
         Node generate(int x, int y, int x1, int y1, string state,Node node)
