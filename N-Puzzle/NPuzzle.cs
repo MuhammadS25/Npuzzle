@@ -70,7 +70,7 @@ namespace N_Puzzle
             return value;
         }
 
-        public Node solve() //O(Elog(V) + n^2)
+        public Node solve() //O(Elog(V))
         {
             Node parent = new(0,"",null,n);
             parent.mat = matrix;
@@ -99,7 +99,7 @@ namespace N_Puzzle
             return true;
         }
 
-        void childFactory(Node parent) //O(log(V) + n^2)
+        void childFactory(Node parent) //O(log(V))
         {
             for (int i = 0; i < 4; i++)
             {

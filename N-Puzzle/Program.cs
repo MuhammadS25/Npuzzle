@@ -10,7 +10,6 @@ namespace N_Puzzle
         static int DISTANCE_TYPE;
         static void Main(string[] args)
         {
-
             Console.WriteLine("SampleTest [1] : \nCompleteTest [2] : \nVeryLargeTest[3] :");
             int diff = int.Parse(Console.ReadLine());
             Console.WriteLine("Hamming [0] : \nManhattan [1] :");
