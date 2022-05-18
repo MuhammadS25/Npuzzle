@@ -47,7 +47,10 @@ namespace N_Puzzle
                     NPuzzle nPuzzle = ReadFile(solvedSample, DISTANCE_TYPE);
                     Stopwatch watch = new Stopwatch();
                     watch.Start();
-                    nPuzzle.solve();
+                    Node parent = nPuzzle.solve();
+                    if (nPuzzle.n == 3)
+                        nPuzzle.printroot(parent); 
+                    Console.WriteLine("steps :" + parent.depth);
                     watch.Stop();
                     Console.WriteLine($"Execution time : {watch.Elapsed.TotalSeconds} sec ");
                     Console.WriteLine();
@@ -80,7 +83,10 @@ namespace N_Puzzle
                     NPuzzle nPuzzle =  ReadFile(solvedComplete, 1);
                     Stopwatch watch = new Stopwatch();
                     watch.Start();
-                    nPuzzle.solve();
+                    Node parent = nPuzzle.solve();
+                    if (nPuzzle.n == 3)
+                        nPuzzle.printroot(parent);
+                    Console.WriteLine("steps :" + parent.depth);
                     watch.Stop();
                     Console.WriteLine($"Execution time : {watch.Elapsed.TotalSeconds} sec ");
                     Console.WriteLine();
@@ -92,7 +98,10 @@ namespace N_Puzzle
                     NPuzzle nPuzzle = ReadFile(solvedComplete, DISTANCE_TYPE);
                     Stopwatch watch = new Stopwatch();
                     watch.Start();
-                    nPuzzle.solve();
+                    Node parent = nPuzzle.solve();
+                    if (nPuzzle.n == 3)
+                        nPuzzle.printroot(parent);
+                    Console.WriteLine("steps :" + parent.depth);
                     watch.Stop();
                     Console.WriteLine($"Execution time : {watch.Elapsed.TotalSeconds} sec ");
                     Console.WriteLine();
@@ -119,7 +128,10 @@ namespace N_Puzzle
             NPuzzle nPuzzle = ReadFile(veryLarge, 1);
             Stopwatch watch = new Stopwatch();
             watch.Start();
-            nPuzzle.solve();
+            Node parent = nPuzzle.solve();
+            if (nPuzzle.n == 3)
+                nPuzzle.printroot(parent);
+            Console.WriteLine("steps :" + parent.depth);
             watch.Stop();
             Console.WriteLine($"Execution Time: {watch.Elapsed.TotalSeconds} sec");
             Console.WriteLine();
