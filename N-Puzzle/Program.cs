@@ -8,24 +8,20 @@ namespace N_Puzzle
     class Program
     {
         static int DISTANCE_TYPE;
+        static bool solve;
         static void Main(string[] args)
         {
             Console.WriteLine("SampleTest [1] : \nCompleteTest [2] : \nVeryLargeTest[3] :");
             int diff = int.Parse(Console.ReadLine());
             Console.WriteLine("Hamming [0] : \nManhattan [1] :");
             DISTANCE_TYPE = int.Parse(Console.ReadLine());
-            int type = 0;
             switch (diff)
             {
                 case 1 :
-                    Console.WriteLine("Solvable[1] : \nNotSolvable[2] :");
-                    type = int.Parse(Console.ReadLine());
-                    SampleTest(type);
+                    SampleTest();
                     break;
                 case 2:
-                    Console.WriteLine("Solvable[1] : \nNotSolvable[2] :");
-                    type = int.Parse(Console.ReadLine());
-                    CompleteTest(type);
+                    CompleteTest();
                     break;
                 default:
                     VeryLargeTest();
@@ -33,46 +29,43 @@ namespace N_Puzzle
             }
         }
 
-        static void SampleTest(int type)
+        static void SampleTest()
         {
             Console.WriteLine("Sample : ");
-            if (type == 1)
+            
+            string[] samplefilenames = { "8 Puzzle (1)", "8 Puzzle (2)", "8 Puzzle (3)", "15 Puzzle - 1", "24 Puzzle 1", "24 Puzzle 2" };
+
+            foreach (string name in samplefilenames)
             {
-                string[] samplefilenames = { "8 Puzzle (1)", "8 Puzzle (2)", "8 Puzzle (3)", "15 Puzzle - 1", "24 Puzzle 1", "24 Puzzle 2" };
-               
-                foreach (string name in samplefilenames)
+                string solvedSample = @"Sample Test/Solvable Puzzles/" + name + @".txt";
+                NPuzzle nPuzzle = ReadFile(solvedSample, DISTANCE_TYPE);
+                Stopwatch watch = new Stopwatch();
+                watch.Start();
+                if (solve)
                 {
-                    string solvedSample = @"Sample Test/Solvable Puzzles/" + name + @".txt";
-                    NPuzzle nPuzzle = ReadFile(solvedSample, DISTANCE_TYPE);
-                    Stopwatch watch = new Stopwatch();
-                    watch.Start();
                     Node parent = nPuzzle.solve();
                     if (nPuzzle.n == 3)
-                        nPuzzle.printroot(parent); 
+                        nPuzzle.printroot(parent);
                     Console.WriteLine("steps :" + parent.depth);
                     watch.Stop();
                     Console.WriteLine($"Execution time : {watch.Elapsed.TotalSeconds} sec ");
                     Console.WriteLine();
-
                 }
             }
-            else
+            string[] samplefilenamesnot = { "8 Puzzle - Case 1", "8 Puzzle(2) - Case 1", "8 Puzzle(3) - Case 1", "15 Puzzle - Case 2", "15 Puzzle - Case 3" };
+            foreach (string name in samplefilenamesnot)
             {
-                string[] samplefilenames = { "8 Puzzle - Case 1", "8 Puzzle(2) - Case 1", "8 Puzzle(3) - Case 1", "15 Puzzle - Case 2", "15 Puzzle - Case 3" };
-                foreach (string name in samplefilenames)
-                {
-                    string unsolvedSample = @"Sample Test/Unsolvable Puzzles/" + name + @".txt";
-                    ReadFile(unsolvedSample);
-                    Console.WriteLine();
-                }
+                string unsolvedSample = @"Sample Test/Unsolvable Puzzles/" + name + @".txt";
+                ReadFile(unsolvedSample);
+                Console.WriteLine();
             }
+            
         }
 
-        static void CompleteTest(int type)
+        static void CompleteTest()
         {
             Console.WriteLine("Complete : ");
-            if (type == 1)
-            {
+    
                 string[] completefilenames = { "15 Puzzle 1", "15 Puzzle 3", "15 Puzzle 4", "15 Puzzle 5" };
                 string[] completefilenames2 = { "50 Puzzle", "99 Puzzle - 1", "99 Puzzle - 2", "9999 Puzzle" };
                 
@@ -82,13 +75,16 @@ namespace N_Puzzle
                     NPuzzle nPuzzle =  ReadFile(solvedComplete, 1);
                     Stopwatch watch = new Stopwatch();
                     watch.Start();
-                    Node parent = nPuzzle.solve();
-                    if (nPuzzle.n == 3)
-                        nPuzzle.printroot(parent);
-                    Console.WriteLine("steps :" + parent.depth);
-                    watch.Stop();
-                    Console.WriteLine($"Execution time : {watch.Elapsed.TotalSeconds} sec ");
-                    Console.WriteLine();
+                    if (solve)
+                    {
+                        Node parent = nPuzzle.solve();
+                        if (nPuzzle.n == 3)
+                            nPuzzle.printroot(parent);
+                        Console.WriteLine("steps :" + parent.depth);
+                        watch.Stop();
+                        Console.WriteLine($"Execution time : {watch.Elapsed.TotalSeconds} sec ");
+                        Console.WriteLine();
+                    }
                 }
 
                 foreach (string name in completefilenames2)
@@ -97,27 +93,27 @@ namespace N_Puzzle
                     NPuzzle nPuzzle = ReadFile(solvedComplete, DISTANCE_TYPE);
                     Stopwatch watch = new Stopwatch();
                     watch.Start();
-                    Node parent = nPuzzle.solve();
-                    if (nPuzzle.n == 3)
-                        nPuzzle.printroot(parent);
-                    Console.WriteLine("steps :" + parent.depth);
-                    watch.Stop();
-                    Console.WriteLine($"Execution time : {watch.Elapsed.TotalSeconds} sec ");
-                    Console.WriteLine();
+                    if (solve)
+                    {
+                        Node parent = nPuzzle.solve();
+                        if (nPuzzle.n == 3)
+                            nPuzzle.printroot(parent);
+                        Console.WriteLine("steps :" + parent.depth);
+                        watch.Stop();
+                        Console.WriteLine($"Execution time : {watch.Elapsed.TotalSeconds} sec ");
+                        Console.WriteLine();
+                    }
                 }
-            }
-            else
-            {
 
-                string[] completefilenames = { "15 Puzzle 1 - Unsolvable", "99 Puzzle - Unsolvable Case 1", "99 Puzzle - Unsolvable Case 2", "9999 Puzzle" };
+                string[] completefilenamesnot = { "15 Puzzle 1 - Unsolvable", "99 Puzzle - Unsolvable Case 1", "99 Puzzle - Unsolvable Case 2", "9999 Puzzle" };
 
-                foreach (string name in completefilenames)
+                foreach (string name in completefilenamesnot)
                 {
                     string unsolvedComplete = @"Complete Test/Unsolvable puzzles/" + name + @".txt";
                     ReadFile(unsolvedComplete);
                     Console.WriteLine();
                 }
-            }
+            
         }
 
         static void VeryLargeTest()
@@ -127,13 +123,16 @@ namespace N_Puzzle
             NPuzzle nPuzzle = ReadFile(veryLarge, 1);
             Stopwatch watch = new Stopwatch();
             watch.Start();
-            Node parent = nPuzzle.solve();
-            if (nPuzzle.n == 3)
-                nPuzzle.printroot(parent);
-            Console.WriteLine("steps :" + parent.depth);
-            watch.Stop();
-            Console.WriteLine($"Execution Time: {watch.Elapsed.TotalSeconds} sec");
-            Console.WriteLine();
+            if (solve)
+            {
+                Node parent = nPuzzle.solve();
+                if (nPuzzle.n == 3)
+                    nPuzzle.printroot(parent);
+                Console.WriteLine("steps :" + parent.depth);
+                watch.Stop();
+                Console.WriteLine($"Execution time : {watch.Elapsed.TotalSeconds} sec ");
+                Console.WriteLine();
+            }
         }
 
         static NPuzzle ReadFile(string fileName, int methodType = 1)
@@ -166,7 +165,8 @@ namespace N_Puzzle
                 }
                 c++;
             }
-            Console.WriteLine(nPuzzle.isSolvable(lis) ? "Solvable" : "not Solvable");
+            solve = nPuzzle.isSolvable(lis);
+            Console.WriteLine( solve ? "Solvable" : "not Solvable");
             return nPuzzle;
         }
     }

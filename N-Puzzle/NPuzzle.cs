@@ -174,7 +174,6 @@ namespace N_Puzzle
 
             mat[x, y] = 0;
             return cost;
-
         }
 
         Node generate(int x, int y, int x1, int y1, string state,Node node) //Θ(n^2)
