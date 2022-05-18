@@ -16,7 +16,7 @@ namespace N_Puzzle
         HashSet<string> set = new HashSet<string>();
 
 
-        public NPuzzle(int n, int methodType)
+        public NPuzzle(int n, int methodType) //Θ(1)
         {
             this.n = n;
             this.methodType = methodType;
@@ -201,14 +201,14 @@ namespace N_Puzzle
             Console.WriteLine();
         }
 
-        public void printroot(Node root) //??
+        public void printroot(Node root) //Θ(# of correct moves)
         {
             if (root == null)
             {
                 return;
             }
             printroot(root.parent);
-            Print(root.mat);
+            Print(root.mat); //Θ(n^2)
         }
 
         public string setState(int[,] matrix) //Θ(n^2)

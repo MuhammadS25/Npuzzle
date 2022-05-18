@@ -9,7 +9,7 @@ namespace N_Puzzle
     {
         static int DISTANCE_TYPE;
         static bool solve;
-        static void Main(string[] args)
+        static void Main(string[] args)//O(Elog(V) + S^2)
         {
             Console.WriteLine("SampleTest [1] : \nCompleteTest [2] : \nVeryLargeTest[3] :");
             int diff = int.Parse(Console.ReadLine());
@@ -18,18 +18,18 @@ namespace N_Puzzle
             switch (diff)
             {
                 case 1 :
-                    SampleTest();
+                    SampleTest();//O(Elog(V) + S^2)
                     break;
                 case 2:
-                    CompleteTest();
+                    CompleteTest();//O(Elog(V) + S^2)
                     break;
                 default:
-                    VeryLargeTest();
+                    VeryLargeTest();//O(Elog(V) + S^2)
                     break;
             }
         }
 
-        static void SampleTest()
+        static void SampleTest()//O(Elog(V) + S^2)
         {
             Console.WriteLine("Sample : ");
             
@@ -38,14 +38,14 @@ namespace N_Puzzle
             foreach (string name in samplefilenames)
             {
                 string solvedSample = @"Sample Test/Solvable Puzzles/" + name + @".txt";
-                NPuzzle nPuzzle = ReadFile(solvedSample, DISTANCE_TYPE);
+                NPuzzle nPuzzle = ReadFile(solvedSample, DISTANCE_TYPE); //Θ(S^2)
                 Stopwatch watch = new Stopwatch();
                 watch.Start();
                 if (solve)
                 {
-                    Node parent = nPuzzle.solve();
+                    Node parent = nPuzzle.solve(); //O(Elog(V))
                     if (nPuzzle.n == 3)
-                        nPuzzle.printroot(parent);
+                        nPuzzle.printroot(parent); //Θ(# of correct moves)
                     Console.WriteLine("steps :" + parent.depth);
                     watch.Stop();
                     Console.WriteLine($"Execution time : {watch.Elapsed.TotalSeconds} sec ");
@@ -62,7 +62,7 @@ namespace N_Puzzle
             
         }
 
-        static void CompleteTest()
+        static void CompleteTest()//O(Elog(V) + S^2)
         {
             Console.WriteLine("Complete : ");
     
@@ -72,15 +72,15 @@ namespace N_Puzzle
                 foreach (string name in completefilenames)
                 {
                     string solvedComplete = @"Complete Test/Solvable puzzles/Manhattan Only/" + name + @".txt";
-                    NPuzzle nPuzzle =  ReadFile(solvedComplete, 1);
-                    Stopwatch watch = new Stopwatch();
+                    NPuzzle nPuzzle =  ReadFile(solvedComplete, 1);//Θ(S^2)
+                Stopwatch watch = new Stopwatch();
                     watch.Start();
                     if (solve)
                     {
-                        Node parent = nPuzzle.solve();
-                        if (nPuzzle.n == 3)
-                            nPuzzle.printroot(parent);
-                        Console.WriteLine("steps :" + parent.depth);
+                        Node parent = nPuzzle.solve();//O(Elog(V))
+                    if (nPuzzle.n == 3)
+                            nPuzzle.printroot(parent);//Θ(# of correct moves)
+                    Console.WriteLine("steps :" + parent.depth);
                         watch.Stop();
                         Console.WriteLine($"Execution time : {watch.Elapsed.TotalSeconds} sec ");
                         Console.WriteLine();
@@ -90,15 +90,15 @@ namespace N_Puzzle
                 foreach (string name in completefilenames2)
                 {
                     string solvedComplete = @"Complete Test/Solvable puzzles/Manhattan & Hamming/" + name + @".txt";
-                    NPuzzle nPuzzle = ReadFile(solvedComplete, DISTANCE_TYPE);
-                    Stopwatch watch = new Stopwatch();
+                    NPuzzle nPuzzle = ReadFile(solvedComplete, DISTANCE_TYPE);//Θ(S^2)
+                Stopwatch watch = new Stopwatch();
                     watch.Start();
                     if (solve)
                     {
-                        Node parent = nPuzzle.solve();
-                        if (nPuzzle.n == 3)
-                            nPuzzle.printroot(parent);
-                        Console.WriteLine("steps :" + parent.depth);
+                        Node parent = nPuzzle.solve();//O(Elog(V))
+                    if (nPuzzle.n == 3)
+                            nPuzzle.printroot(parent);//Θ(# of correct moves)
+                    Console.WriteLine("steps :" + parent.depth);
                         watch.Stop();
                         Console.WriteLine($"Execution time : {watch.Elapsed.TotalSeconds} sec ");
                         Console.WriteLine();
@@ -116,18 +116,18 @@ namespace N_Puzzle
             
         }
 
-        static void VeryLargeTest()
+        static void VeryLargeTest()//O(Elog(V) + S^2)
         {
             string veryLarge = @"Complete Test/V. Large test case/TEST.txt";
 
-            NPuzzle nPuzzle = ReadFile(veryLarge, 1);
+            NPuzzle nPuzzle = ReadFile(veryLarge, 1);//Θ(S^2)
             Stopwatch watch = new Stopwatch();
             watch.Start();
             if (solve)
             {
-                Node parent = nPuzzle.solve();
+                Node parent = nPuzzle.solve();//O(Elog(V))
                 if (nPuzzle.n == 3)
-                    nPuzzle.printroot(parent);
+                    nPuzzle.printroot(parent);//Θ(# of correct moves)
                 Console.WriteLine("steps :" + parent.depth);
                 watch.Stop();
                 Console.WriteLine($"Execution time : {watch.Elapsed.TotalSeconds} sec ");
@@ -135,17 +135,17 @@ namespace N_Puzzle
             }
         }
 
-        static NPuzzle ReadFile(string fileName, int methodType = 1)
+        static NPuzzle ReadFile(string fileName, int methodType = 1) //Θ(S^2)
         {
             List<int> lis = new List<int>();
-            string[] s = File.ReadAllLines(fileName);
+            string[] s = File.ReadAllLines(fileName);//Θ(n^2)
             int n = int.Parse(s[0]);
             NPuzzle nPuzzle = new NPuzzle(n, methodType);
             int c = 0;
             int i = 0;
             if (s[1] == "") i = 2;
             else i = 1;
-            for (; i < s.Length; i++)
+            for (; i < s.Length; i++) //Θ(n^2)
             {
                 string[] k = s[i].Split(' ');
                 for (int j = 0; j < k.Length; j++)
@@ -165,7 +165,7 @@ namespace N_Puzzle
                 }
                 c++;
             }
-            solve = nPuzzle.isSolvable(lis);
+            solve = nPuzzle.isSolvable(lis); //Θ(S^2)
             Console.WriteLine( solve ? "Solvable" : "not Solvable");
             return nPuzzle;
         }
