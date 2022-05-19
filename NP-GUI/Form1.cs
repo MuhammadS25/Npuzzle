@@ -18,7 +18,7 @@ namespace NP_GUI
         List<int> zerosX, zerosY;
         string start;
         public Form1() { InitializeComponent(); }
-        public Form1(String start, List<int> zerosX, List<int> zerosY)
+        public Form1(String start, List<int> zerosX, List<int> zerosY)//Θ(1)
         {
             InitializeComponent();
             ZeroPos.X = 180;
@@ -38,9 +38,9 @@ namespace NP_GUI
 
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void Form1_Load(object sender, EventArgs e)//Θ(N)
         {
-            foreach (Button node in panel1.Controls)
+            foreach (Button node in panel1.Controls)//Θ(# of Btns Count)
                 node.Enabled = true;
             if (start[8] != '0')
             {
@@ -50,42 +50,42 @@ namespace NP_GUI
                 Point p = new Point();
                 p.X = 0;
                 p.Y = 0;
-                locs.Add(p);
+                locs.Add(p);//Θ(1)
                 p.X = 90;
                 p.Y = 0;
-                locs.Add(p);
+                locs.Add(p);//Θ(1)
                 p.X = 180;
                 p.Y = 0;
-                locs.Add(p);
+                locs.Add(p);//Θ(1)
                 p.X = 0;
                 p.Y = 90;
-                locs.Add(p);
+                locs.Add(p);//Θ(1)
                 p.X = 90;
                 p.Y = 90;
-                locs.Add(p);
+                locs.Add(p);//Θ(1)
                 p.X = 180;
                 p.Y = 90;
-                locs.Add(p);
+                locs.Add(p);//Θ(1)
                 p.X = 0;
                 p.Y = 180;
-                locs.Add(p);
+                locs.Add(p);//Θ(1)
                 p.X = 90;
                 p.Y = 180;
-                locs.Add(p);
-                for (int i = 0; i < btns.Length; i++)
+                locs.Add(p);//Θ(1)
+                for (int i = 0; i < btns.Length; i++)//Θ(# of Btns Count)
                     btns[i].Location = locs[i];
-                int zeroIndex = start.IndexOf('0');
+                int zeroIndex = start.IndexOf('0');//O(N)
                 Point swap = btns[zeroIndex].Location;
                 btns[zeroIndex].Location = ZeroPos;
                 ZeroPos = swap;
                 btns[zeroIndex].Text = Char.ToString(start[8]);
-                for (int i = 0; i < start.Length - 1; ++i)
+                for (int i = 0; i < start.Length - 1; ++i)//Θ(N)
                 {
                     if (start[i] == '0') continue;
                     btns[i].Text = Char.ToString(start[i]);
                 }
             }
-            else
+            else//Θ(1)
             {
                 button4.Text = Char.ToString(start[0]);
                 button5.Text = Char.ToString(start[1]);
@@ -99,7 +99,7 @@ namespace NP_GUI
         }
 
 
-        private async void Solvebutton_Click(object sender, EventArgs e)
+        private async void Solvebutton_Click(object sender, EventArgs e)//Θ(# of correct moves * # of Btns Count)
         {
             Button[] btns = {button4,button5,button6,button7
                     ,button8,button9,button10,button11};
@@ -107,13 +107,13 @@ namespace NP_GUI
             this.progressBar1.Minimum = 0;
             this.progressBar1.Maximum = zerosX.Count;
             this.progressBar1.Increment(1);
-            for (int i = 1; i < zerosX.Count; ++i)
+            for (int i = 1; i < zerosX.Count; ++i)//Θ(# of correct moves)
             {
                 textBox1.Text = s + i.ToString();
-                this.progressBar1.Increment(1);
+                this.progressBar1.Increment(1);//Θ(1)
                 spare.X = zerosX[i] * 90;
                 spare.Y = zerosY[i] * 90;
-                foreach (Button btn in btns)
+                foreach (Button btn in btns)//Θ(# of Btns Count)
                 {
                     if (btn.Location == spare)
                     {

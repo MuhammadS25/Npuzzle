@@ -4,7 +4,7 @@ using System.Text;
 
 namespace N_Puzzle
 {
-   public class Node
+    public class Node
     {
         public int[,] mat;
         public int hValue;
