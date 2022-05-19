@@ -9,137 +9,146 @@ namespace N_Puzzle
     class Program
     {
         static int DISTANCE_TYPE;
-        static void Main(string[] args)
+        static bool solve;
+        static void Main(string[] args)//O(Elog(V) + S^2)
         {
             Console.WriteLine("SampleTest [1] : \nCompleteTest [2] : \nVeryLargeTest[3] :");
             int diff = int.Parse(Console.ReadLine());
             Console.WriteLine("Hamming [0] : \nManhattan [1] :");
             DISTANCE_TYPE = int.Parse(Console.ReadLine());
-            int type = 0;
             switch (diff)
             {
-                case 1 :
-                    Console.WriteLine("Solvable[1] : \nNotSolvable[2] :");
-                    type = int.Parse(Console.ReadLine());
-                    SampleTest(type);
+                case 1:
+                    SampleTest();//O(Elog(V) + S^2)
                     break;
                 case 2:
-                    Console.WriteLine("Solvable[1] : \nNotSolvable[2] :");
-                    type = int.Parse(Console.ReadLine());
-                    CompleteTest(type);
+                    CompleteTest();//O(Elog(V) + S^2)
                     break;
                 default:
-                    VeryLargeTest();
+                    VeryLargeTest();//O(Elog(V) + S^2)
                     break;
             }
         }
 
-        static void SampleTest(int type)
+        static void SampleTest()
         {
             Console.WriteLine("Sample : ");
-            if (type == 1)
+
+            string[] samplefilenames = { "8 Puzzle (1)", "8 Puzzle (2)", "8 Puzzle (3)", "15 Puzzle - 1", "24 Puzzle 1", "24 Puzzle 2" };
+
+            foreach (string name in samplefilenames)
             {
-                string[] samplefilenames = { "8 Puzzle (1)", "8 Puzzle (2)", "8 Puzzle (3)", "15 Puzzle - 1", "24 Puzzle 1", "24 Puzzle 2" };
-               
-                foreach (string name in samplefilenames)
+                string solvedSample = @"Sample Test/Solvable Puzzles/" + name + @".txt";
+                NPuzzle nPuzzle = ReadFile(solvedSample, DISTANCE_TYPE);
+                Stopwatch watch = new Stopwatch();
+                watch.Start();
+                if (solve)
                 {
-                    string solvedSample = @"Sample Test/Solvable Puzzles/" + name + @".txt";
-                    NPuzzle nPuzzle = ReadFile(solvedSample, DISTANCE_TYPE);
-                    Stopwatch watch = new Stopwatch();
-                    watch.Start();
-                    nPuzzle.solve();
+                    Node parent = nPuzzle.solve(); //O(Elog(V))
+                    if (nPuzzle.n == 3)
+                        nPuzzle.printroot(parent); //Θ(# of correct moves)
+                    Console.WriteLine("steps :" + parent.depth);
                     watch.Stop();
                     Console.WriteLine($"Execution time : {watch.Elapsed.TotalSeconds} sec ");
                     Console.WriteLine();
-                    if (nPuzzle.n == 3)
-                    {
-                        Form1 form1 = new Form1(nPuzzle.StartState, nPuzzle.zerosX, nPuzzle.zerosY);
-                        form1.ShowDialog();
-                    }
+                }
+                if (nPuzzle.n == 3)
+                {
+                    Form1 form1 = new Form1(nPuzzle.StartState, nPuzzle.zerosX, nPuzzle.zerosY);//Θ(1)
+                    form1.ShowDialog();//Θ(N)
                 }
             }
-            else
+            string[] samplefilenamesnot = { "8 Puzzle - Case 1", "8 Puzzle(2) - Case 1", "8 Puzzle(3) - Case 1", "15 Puzzle - Case 2", "15 Puzzle - Case 3" };
+            foreach (string name in samplefilenamesnot)
             {
-                string[] samplefilenames = { "8 Puzzle - Case 1", "8 Puzzle(2) - Case 1", "8 Puzzle(3) - Case 1", "15 Puzzle - Case 2", "15 Puzzle - Case 3" };
-                foreach (string name in samplefilenames)
-                {
-                    string unsolvedSample = @"Sample Test/Unsolvable Puzzles/" + name + @".txt";
-                    ReadFile(unsolvedSample);
-                    Console.WriteLine();
-                }
+                string unsolvedSample = @"Sample Test/Unsolvable Puzzles/" + name + @".txt";
+                ReadFile(unsolvedSample);
+                Console.WriteLine();
             }
         }
 
-        static void CompleteTest(int type)
+        static void CompleteTest()
         {
             Console.WriteLine("Complete : ");
-            if (type == 1)
-            {
-                string[] completefilenames = { "15 Puzzle 1", "15 Puzzle 3", "15 Puzzle 4", "15 Puzzle 5" };
-                string[] completefilenames2 = { "50 Puzzle", "99 Puzzle - 1", "99 Puzzle - 2", "9999 Puzzle" };
-                
-                foreach (string name in completefilenames)
-                {
-                    string solvedComplete = @"Complete Test/Solvable puzzles/Manhattan Only/" + name + @".txt";
-                    NPuzzle nPuzzle =  ReadFile(solvedComplete, 1);
-                    Stopwatch watch = new Stopwatch();
-                    watch.Start();
-                    nPuzzle.solve();
-                    watch.Stop();
-                    Console.WriteLine($"Execution time : {watch.Elapsed.TotalSeconds} sec ");
-                    Console.WriteLine();
-                }
 
-                foreach (string name in completefilenames2)
+            string[] completefilenames = { "15 Puzzle 1", "15 Puzzle 3", "15 Puzzle 4", "15 Puzzle 5" };
+            string[] completefilenames2 = { "50 Puzzle", "99 Puzzle - 1", "99 Puzzle - 2", "9999 Puzzle" };
+
+            foreach (string name in completefilenames)
+            {
+                string solvedComplete = @"Complete Test/Solvable puzzles/Manhattan Only/" + name + @".txt";
+                NPuzzle nPuzzle = ReadFile(solvedComplete, 1);//Θ(S^2)
+                Stopwatch watch = new Stopwatch();
+                watch.Start();
+                if (solve)
                 {
-                    string solvedComplete = @"Complete Test/Solvable puzzles/Manhattan & Hamming/" + name + @".txt";
-                    NPuzzle nPuzzle = ReadFile(solvedComplete, DISTANCE_TYPE);
-                    Stopwatch watch = new Stopwatch();
-                    watch.Start();
-                    nPuzzle.solve();
+                    Node parent = nPuzzle.solve();//O(Elog(V))
+                    if (nPuzzle.n == 3)
+                        nPuzzle.printroot(parent);//Θ(# of correct moves)
+                    Console.WriteLine("steps :" + parent.depth);
                     watch.Stop();
                     Console.WriteLine($"Execution time : {watch.Elapsed.TotalSeconds} sec ");
                     Console.WriteLine();
                 }
             }
-            else
+
+            foreach (string name in completefilenames2)
             {
-
-                string[] completefilenames = { "15 Puzzle 1 - Unsolvable", "99 Puzzle - Unsolvable Case 1", "99 Puzzle - Unsolvable Case 2", "9999 Puzzle" };
-
-                foreach (string name in completefilenames)
+                string solvedComplete = @"Complete Test/Solvable puzzles/Manhattan & Hamming/" + name + @".txt";
+                NPuzzle nPuzzle = ReadFile(solvedComplete, DISTANCE_TYPE);//Θ(S^2)
+                Stopwatch watch = new Stopwatch();
+                watch.Start();
+                if (solve)
                 {
-                    string unsolvedComplete = @"Complete Test/Unsolvable puzzles/" + name + @".txt";
-                    ReadFile(unsolvedComplete);
+                    Node parent = nPuzzle.solve();//O(Elog(V))
+                    if (nPuzzle.n == 3)
+                        nPuzzle.printroot(parent);//Θ(# of correct moves)
+                    Console.WriteLine("steps :" + parent.depth);
+                    watch.Stop();
+                    Console.WriteLine($"Execution time : {watch.Elapsed.TotalSeconds} sec ");
                     Console.WriteLine();
                 }
+            }
+            string[] completefilenamesnot = { "15 Puzzle 1 - Unsolvable", "99 Puzzle - Unsolvable Case 1", "99 Puzzle - Unsolvable Case 2", "9999 Puzzle" };
+
+            foreach (string name in completefilenamesnot)
+            {
+                string unsolvedComplete = @"Complete Test/Unsolvable puzzles/" + name + @".txt";
+                ReadFile(unsolvedComplete);//Θ(S^2)
+                Console.WriteLine();
             }
         }
 
-        static void VeryLargeTest()
+        static void VeryLargeTest()//O(Elog(V) + S^2)
         {
             string veryLarge = @"Complete Test/V. Large test case/TEST.txt";
 
-            NPuzzle nPuzzle = ReadFile(veryLarge, 1);
+            NPuzzle nPuzzle = ReadFile(veryLarge, 1);//Θ(S^2)
             Stopwatch watch = new Stopwatch();
             watch.Start();
-            nPuzzle.solve();
-            watch.Stop();
-            Console.WriteLine($"Execution Time: {watch.Elapsed.TotalSeconds} sec");
-            Console.WriteLine();
+            if (solve)
+            {
+                Node parent = nPuzzle.solve();//O(Elog(V))
+                if (nPuzzle.n == 3)
+                    nPuzzle.printroot(parent);//Θ(# of correct moves)
+                Console.WriteLine("steps :" + parent.depth);
+                watch.Stop();
+                Console.WriteLine($"Execution time : {watch.Elapsed.TotalSeconds} sec ");
+                Console.WriteLine();
+            }
         }
 
-        static NPuzzle ReadFile(string fileName, int methodType = 1)
+        static NPuzzle ReadFile(string fileName, int methodType = 1) //Θ(S^2)
         {
             List<int> lis = new List<int>();
-            string[] s = File.ReadAllLines(fileName);
+            string[] s = File.ReadAllLines(fileName);//Θ(n^2)
             int n = int.Parse(s[0]);
             NPuzzle nPuzzle = new NPuzzle(n, methodType);
             int c = 0;
             int i = 0;
             if (s[1] == "") i = 2;
             else i = 1;
-            for (; i < s.Length; i++)
+            for (; i < s.Length; i++) //Θ(n^2)
             {
                 string[] k = s[i].Split(' ');
                 for (int j = 0; j < k.Length; j++)
@@ -147,8 +156,8 @@ namespace N_Puzzle
                     if (!k[j].Equals(""))
                     {
                         int result = 0;
-                        nPuzzle.StartState += k[j];
                         int.TryParse(k[j], out result);
+                        nPuzzle.StartState += k[j];
                         lis.Add(result);
                         nPuzzle.matrix[c, j] = result;
                         if (nPuzzle.matrix[c, j] == 0)
@@ -160,7 +169,8 @@ namespace N_Puzzle
                 }
                 c++;
             }
-            Console.WriteLine(nPuzzle.isSolvable(lis) ? "Solvable" : "not Solvable");
+            solve = nPuzzle.isSolvable(lis); //Θ(S^2)
+            Console.WriteLine(solve ? "Solvable" : "not Solvable");
             return nPuzzle;
         }
     }

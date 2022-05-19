@@ -10,14 +10,14 @@ namespace N_Puzzle
         public int n, methodType;
         public int x0, y0;
         bool first = true;
-        public String StartState="";
+        public String StartState = "";
         int[] aroundX = { -1, 1, 0, 0 };
         int[] aroundY = { 0, 0, -1, 1 };
         PriorityQueue priorityQueue = new PriorityQueue();
         HashSet<string> set = new HashSet<string>();
-        public List<int>zerosX,zerosY;
+        public List<int> zerosX, zerosY;
 
-        public NPuzzle(int n, int methodType)
+        public NPuzzle(int n, int methodType)//Θ(1)
         {
             this.n = n;
             this.methodType = methodType;
@@ -26,10 +26,10 @@ namespace N_Puzzle
             zerosY = new List<int>();
         }
 
-        public bool isSolvable(List<int> lis)
+        public bool isSolvable(List<int> lis)//Θ(S^2)
         {
             int inversion = 0;
-            for (int x = 0; x < n * n - 1; x++)
+            for (int x = 0; x < n * n - 1; x++)//Θ(S^2)
             {
                 for (int y = x + 1; y < n * n; y++)
                 {
@@ -43,12 +43,12 @@ namespace N_Puzzle
 
             if (n % 2 != 0)
             {
-                if (inversion % 2 != 0) return false;
+                if (inversion % 2 != 0) return false;//Θ(1)
             }
             else
             {
                 int index = 0;
-                for (int i = n - 1; i >= 0; i--)
+                for (int i = n - 1; i >= 0; i--)//Θ(n^2)
                     for (int j = n - 1; j >= 0; j--)
                         if (matrix[i, j] == 0)
                             index = n - i;
@@ -58,75 +58,77 @@ namespace N_Puzzle
             return true;
         }
 
-        int method(int type, Node node, int cost = 0){
+        int method(int type, Node node, int cost = 0)//O(n^2)
+        {
 
             int value = 0;
 
-            if(type == 0){
-                value = hamming(node.mat) + node.depth;
+            if (type == 0)
+            {
+                value = hamming(node.mat) + node.depth;//Θ(n^2)
             }
-            else{
-                value = manhattan(node.mat , cost) + node.depth;
+            else
+            {
+                value = manhattan(node.mat, cost) + node.depth;//O(n^2)
             }
 
             return value;
         }
 
-        public void solve()
+        public Node solve()//O(Elog(V))
         {
-            Node parent = new(0,"",null,n);
+            Node parent = new(0, "", null, n);
             parent.mat = matrix;
-            parent.state = setState(parent.mat);
+            parent.state = setState(parent.mat);//Θ(n^2)
             parent.x0 = x0;
             parent.y0 = y0;
-            parent.hValue = method(methodType, parent); 
+            parent.hValue = method(methodType, parent);//O(n^2)
             set.Add(parent.state);
-            priorityQueue.push(parent);
+            priorityQueue.push(parent);//O(log(V))
 
-            while (priorityQueue.getSize() != 0)
+            while (priorityQueue.getSize() != 0)//Θ(1)
             {
                 if (parent.hValue == parent.depth)
                     break;
 
-                parent = priorityQueue.pop();
+                parent = priorityQueue.pop();//O(log(V))
                 childFactory(parent);
             }
 
-            if (n == 3)
-                 printroot(parent);
-            Console.WriteLine("steps :" + parent.depth);
+            return parent;
         }
 
-        bool permissionToGo(int x , int y)
+        bool permissionToGo(int x, int y)//Θ(1)
         {
             if (x < 0 || y < 0 || x > n - 1 || y > n - 1) return false;
             return true;
         }
 
-        void childFactory(Node parent)
+        void childFactory(Node parent)//O(log(V))
         {
             for (int i = 0; i < 4; i++)
             {
-                if (permissionToGo(parent.x0 + aroundX[i], parent.y0 + aroundY[i]))
+                if (permissionToGo(parent.x0 + aroundX[i], parent.y0 + aroundY[i]))//Θ(1)
                 {
-                    int[,] temp = parent.mat.Clone() as int[,];
-                    int cost = Swap(temp,parent.x0 + aroundX[i], parent.y0 + aroundY[i], parent , parent.depth);
-                    string s = setState(temp);
+                    int[,] temp = parent.mat.Clone() as int[,];//Θ(n^2)
+                    int cost = Swap(temp, parent.x0 + aroundX[i], parent.y0 + aroundY[i], parent, parent.depth);//Θ(1)
+                    string s = setState(temp);//Θ(n^2)
                     if (!set.Contains(s))
                     {
-                        Node newNode = generate(parent.x0, parent.y0, parent.x0 + aroundX[i], parent.y0 + aroundY[i], s, parent);
-                        set.Add(newNode.state);
-                        newNode.hValue = method(methodType, newNode, cost);
-                        priorityQueue.push(newNode);
+                        Node newNode = generate(parent.x0, parent.y0, parent.x0 + aroundX[i], parent.y0 + aroundY[i], s, parent);//Θ(n^2)
+                        set.Add(newNode.state);//Θ(1)
+                        newNode.hValue = method(methodType, newNode, cost);//O(n^2)
+                        priorityQueue.push(newNode);//O(log(V))
                     }
                 }
             }
         }
 
-        int manhattan(int[,] mat , int cost)
+        int manhattan(int[,] mat, int cost)//O(n^2)
         {
             int miss = 0;
-            if (first) { 
+            if (first)
+            {
                 for (int i = 0; i < n; i++)
                 {
                     for (int j = 0; j < n; j++)
@@ -138,7 +140,7 @@ namespace N_Puzzle
                             miss += Math.Abs(x - i) + Math.Abs(y - j);
                         }
                     }
-                        first = false;
+                    first = false;
                 }
             }
             else
@@ -148,7 +150,7 @@ namespace N_Puzzle
             return miss;
         }
 
-        public int hamming(int[,] mat)
+        public int hamming(int[,] mat)//Θ(n^2)
         {
             int misPlaced = 0;
             int temp = 0;
@@ -165,7 +167,7 @@ namespace N_Puzzle
             return misPlaced;
         }
 
-        int Swap(int[,] mat , int x , int y , Node parent, int depth)
+        int Swap(int[,] mat, int x, int y, Node parent, int depth)// O(1)
         {
             mat[parent.x0, parent.y0] = mat[x, y];
 
@@ -183,7 +185,7 @@ namespace N_Puzzle
 
         }
 
-        Node generate(int x, int y, int x1, int y1, string state,Node node)
+        Node generate(int x, int y, int x1, int y1, string state, Node node)//Θ(n^2)
         {
             Node newNode = new(node.depth + 1, state, node, n);
             newNode.mat = node.mat.Clone() as int[,];
@@ -194,7 +196,7 @@ namespace N_Puzzle
             return newNode;
         }
 
-        void Print(int[,] matrix)
+        void Print(int[,] matrix)//Θ(n^2)
         {
             for (int i = 0; i < n; i++)
             {
@@ -208,19 +210,19 @@ namespace N_Puzzle
             Console.WriteLine();
         }
 
-        void printroot(Node root)
+        public void printroot(Node root)//Θ(# of correct moves)
         {
             if (root == null)
             {
                 return;
             }
             printroot(root.parent);
-            zerosX.Add(root.x0);
-            zerosY.Add(root.y0);
-            Print(root.mat);
+            zerosX.Add(root.x0);//Θ(1)
+            zerosY.Add(root.y0);//Θ(1)
+            Print(root.mat);//Θ(n^2)
         }
 
-        public string setState(int[,] matrix)
+        public string setState(int[,] matrix)//Θ(n^2)
         {
             string state = "";
             for (int i = 0; i < n; i++)
